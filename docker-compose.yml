@@ -1,0 +1,57 @@
+version: "3"
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api_service
+    ports:
+      - "${API_PORT}"
+    env_file:
+      - .env
+    links:
+      - db
+    volumes:
+      - ./api:/usr/src/app
+    networks:
+      - app_network
+    environment:
+      - NODE_ENV=${NODE_ENV}
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: app_service
+    ports:
+      - "${FLUTTER_PORT}"
+    env_file:
+      - .env
+    links:
+      - api
+    volumes:
+      - ./app:/app
+    networks:
+      - app_network
+    environment:
+      - API_URL=${API_URL}
+
+  db:
+    image: postgres:15
+    container_name: database_service
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+volumes:
+  db_data:
+
+networks:
+  app_network:
+    driver: bridge
