@@ -49,7 +49,12 @@ class _OnBoardingWidgetState extends State<OnBoardingWidget> {
                       itemBuilder: (BuildContext context, int index) {
                         return Column(
                           children: [
-                            Lottie.asset(listOfItems[index].img, height: 300),
+                            Lottie.asset(
+                              listOfItems[index].img,
+                              width: 300,
+                              height: 300,
+                              fit: BoxFit.fill,
+                            ),
                             const SizedBox(
                               height: 20,
                             ),

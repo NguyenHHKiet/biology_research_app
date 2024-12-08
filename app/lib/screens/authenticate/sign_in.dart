@@ -1,8 +1,6 @@
 import 'package:app/models/Colors.dart';
 import 'package:app/screens/authenticate/sign_up.dart';
-import 'package:app/screens/navbar/navbar_root.dart';
 import 'package:app/screens/services/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,38 +24,6 @@ class _SignInState extends State<SignIn> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  userLogin() async {
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) {
-        Fluttertoast.showToast(
-          msg: "Đăng nhập thành công",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: MyColors.darkGreen,
-          textColor: Colors.white,
-        );
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NavBarRoot(),
-            ));
-      });
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: MyColors.darkGreen,
-          content: Text(
-            e.code,
-            style: const TextStyle(fontSize: 18.0),
-          ),
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,43 +36,46 @@ class _SignInState extends State<SignIn> {
           image: AssetImage('assets/bg.png'),
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+      // padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
       child: Scaffold(
-          bottomNavigationBar: ClipRRect(
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-            child: BottomAppBar(
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: MyColors.green.shade400,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40))),
-                  height: 65,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Chưa có tài khoản ? ",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15)),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SignUp(),
-                              ));
-                        },
-                        child: const Text("Đăng ký",
+          resizeToAvoidBottomInset: false,
+          bottomNavigationBar: SafeArea(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+              child: BottomAppBar(
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: MyColors.green.shade400,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40))),
+                    height: 65,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Chưa có tài khoản ? ",
                             style: TextStyle(
-                                color: Colors.brown,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15)),
-                      )
-                    ],
-                  )),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SignUp(),
+                                ));
+                          },
+                          child: const Text("Đăng ký",
+                              style: TextStyle(
+                                  color: Colors.brown,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15)),
+                        )
+                      ],
+                    )),
+              ),
             ),
           ),
           backgroundColor: Colors.transparent,
@@ -269,7 +238,11 @@ class _SignInState extends State<SignIn> {
                                   email = emailController.text;
                                   password = passwordController.text;
                                 });
-                                userLogin();
+                                await _auth.userSignIn(
+                                  context: context,
+                                  email: email,
+                                  password: password,
+                                );
                               } else {
                                 Fluttertoast.showToast(
                                     msg: "Hãy nhập đầy đủ thông tin",
@@ -277,7 +250,7 @@ class _SignInState extends State<SignIn> {
                               }
                             },
                             child: Text(
-                              'Login',
+                              'Đăng nhập',
                               style: GoogleFonts.sigmarOne(
                                   textStyle: const TextStyle(
                                       color: Colors.white, fontSize: 20)),

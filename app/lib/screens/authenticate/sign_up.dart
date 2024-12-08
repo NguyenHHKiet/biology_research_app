@@ -1,6 +1,6 @@
 import 'package:app/models/Colors.dart';
 import 'package:app/screens/authenticate/sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app/screens/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,48 +15,14 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final AuthService _auth = AuthService();
+
   bool passToggle = true;
 
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  Future<void> registration() async {
-    try {
-      print('${emailController.text} ${passwordController.text}');
-
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text)
-          .then((_) {
-        Fluttertoast.showToast(
-            msg: "Đăng ký thành công, hãy đăng nhập",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: MyColors.darkGreen,
-            textColor: Colors.white,
-            fontSize: 16.0);
-
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignIn(),
-            ));
-      });
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: MyColors.darkGreen,
-          content: Text(
-            e.code,
-            style: const TextStyle(fontSize: 18.0),
-          ),
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +95,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                   Center(
                     child: Text(
-                      "Sign Up",
+                      "Đăng ký",
                       style: GoogleFonts.sigmarOne(
                           textStyle: const TextStyle(
                               color: MyColors.green, fontSize: 30)),
@@ -308,7 +274,11 @@ class _SignUpState extends State<SignUp> {
                               var prefs = await SharedPreferences.getInstance();
                               prefs.setString(
                                   'myName', nameController.text.toString());
-                              registration();
+                              await _auth.registration(
+                                context: context,
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
                             } else {
                               Fluttertoast.showToast(
                                   msg: "Hãy nhập đầy đủ thông tin",

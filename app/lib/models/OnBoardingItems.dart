@@ -13,20 +13,20 @@ class Items {
 List<Items> listOfItems = [
   Items(
     // Hình ảnh: Một tán rừng nhiệt đới, thể hiện sự đa dạng sinh học.
-    img: "assets/girlwithfood.json",
+    img: "assets/biology.json",
     title: "Khám phá đa dạng sinh học",
     subTitle: "Tìm hiểu thới giới sinh vật phong phú,\n từ rừng nhiệt đới.",
   ),
   Items(
     // Hình ảnh: Một vi khuẩn được phóng đại dưới kính hiển vi
-    img: "assets/healthyfood.json",
+    img: "assets/microorganism.json",
     title: "Vi sinh vật \n Thế giới vô hình",
     subTitle:
         "Cùng khám phá những sinh vật nhỏ bé \n nhưng đóng vai trò to lớn.",
   ),
   Items(
     // Hình ảnh: Một chuỗi DNA hoặc cây phân loại sinh học
-    img: "assets/burgur.json",
+    img: "assets/evolution.json",
     title: "Phân loại và tiến hóa",
     subTitle: "Khám phá sự liên kết và tiến hóa của các loài sinh vật!!",
   ),
