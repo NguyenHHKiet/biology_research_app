@@ -24,6 +24,11 @@ class _SignUpState extends State<SignUp> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  void saveValue() async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setString('myName', nameController.text.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -271,9 +276,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              var prefs = await SharedPreferences.getInstance();
-                              prefs.setString(
-                                  'myName', nameController.text.toString());
+                              saveValue();
                               await _auth.registration(
                                 context: context,
                                 email: emailController.text,
