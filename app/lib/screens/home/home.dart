@@ -108,8 +108,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 style: _getTitleTextStyle(context),
               );
             } else {
-              final name = snapshot.data ?? "Guest";
-              return Text("Welcome $name", style: _getTitleTextStyle(context));
+              String name = snapshot.data ?? "Guest";
+              return _buildGreetingRow(name);
             }
           },
         ),
