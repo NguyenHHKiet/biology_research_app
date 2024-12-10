@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SpeciesList extends StatelessWidget {
   final List<dynamic> species;
 
-  const SpeciesList({Key? key, required this.species}) : super(key: key);
+  const SpeciesList({super.key, required this.species});
 
   @override
   Widget build(BuildContext context) {

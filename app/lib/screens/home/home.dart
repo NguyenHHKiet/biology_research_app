@@ -1,4 +1,3 @@
-import 'package:app/models/CardList.dart';
 import 'package:app/models/Colors.dart';
 import 'package:app/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
@@ -84,118 +83,39 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.light
-          ? Colors.green.shade50
-          : Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false, // Xóa nút back
-        elevation: 0,
-        centerTitle: true,
         backgroundColor: Theme.of(context).brightness == Brightness.light
             ? Colors.green.shade50
             : Theme.of(context).scaffoldBackgroundColor,
-        iconTheme: const IconThemeData(color: MyColors.darkGreen),
-        title: FutureBuilder<String?>(
-          future: _nameFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text(
-                "Loading...",
-                style: _getTitleTextStyle(context),
-              );
-            } else if (snapshot.hasError) {
-              return Text(
-                "Error",
-                style: _getTitleTextStyle(context),
-              );
-            } else {
-              String name = snapshot.data ?? "Guest";
-              return _buildGreetingRow(name);
-            }
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio:
-                0.8, // Adjust this value to control the card proportions
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
+        appBar: AppBar(
+          automaticallyImplyLeading: false, // Xóa nút back
+          elevation: 0,
+          centerTitle: true,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.green.shade50
+              : Theme.of(context).scaffoldBackgroundColor,
+          iconTheme: const IconThemeData(color: MyColors.darkGreen),
+          title: FutureBuilder<String?>(
+            future: _nameFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text(
+                  "Loading...",
+                  style: _getTitleTextStyle(context),
+                );
+              } else if (snapshot.hasError) {
+                return Text(
+                  "Error",
+                  style: _getTitleTextStyle(context),
+                );
+              } else {
+                String name = snapshot.data ?? "Guest";
+                return _buildGreetingRow(name);
+              }
+            },
           ),
-          itemCount: listOfCards.length,
-          itemBuilder: (context, index) {
-            final card = listOfCards[index];
-            return Card(
-              elevation: 3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.green.shade50
-                  : Theme.of(context).cardColor,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
-                        child: AspectRatio(
-                          aspectRatio: 1, // Tỷ lệ vuông 1:1
-                          child: Image.asset(
-                            card.img,
-                            fit: BoxFit.cover,
-                            alignment: Alignment.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          card.title,
-                          style: TextStyle(
-                            color:
-                                Theme.of(context).brightness == Brightness.light
-                                    ? MyColors.darkGreen
-                                    : Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          "${card.icon} ${card.ret} | ${card.calories}",
-                          style: TextStyle(
-                            color:
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Colors.black54
-                                    : Colors.white60,
-                            fontSize: 14,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
         ),
-      ),
-    );
+        body: Center(
+            child: Text(
+                "Cơ sở dữ liệu đa dạng sinh học Vườn Quốc gia U Minh Thượng")));
   }
 }

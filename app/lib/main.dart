@@ -1,7 +1,6 @@
 import 'package:app/provider/login_sharedpreference_provider.dart';
 import 'package:app/provider/match_data_provider.dart';
 import 'package:app/provider/theme_changer_provider.dart';
-import 'package:app/screens/authenticate/authenticate.dart';
 import 'package:app/screens/navbar/navbar_root.dart';
 import 'package:app/widgets/on_boarding_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
