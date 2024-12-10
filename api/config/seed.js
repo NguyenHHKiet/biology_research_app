@@ -20,6 +20,19 @@ const seedDatabase = async () => {
       genus_id: genusPanthera.id,
     });
 
+    // Thêm Kingdom mới
+    const kingdomPlantae = await models.Kingdom.create({ name: "Plantae" });
+    const phylumMagnoliophyta = await models.Phylum.create({ name: "Magnoliophyta", kingdom_id: kingdomPlantae.id });
+    const classMagnoliopsida = await models.Class.create({ name: "Magnoliopsida", phylum_id: phylumMagnoliophyta.id });
+    const orderRosales = await models.Order.create({ name: "Rosales", class_id: classMagnoliopsida.id });
+    const familyRosaceae = await models.Family.create({ name: "Rosaceae", order_id: orderRosales.id });
+    const genusRosa = await models.Genus.create({ name: "Rosa", family_id: familyRosaceae.id });
+    const speciesRose = await models.Species.create({
+      scientific_name: "Rosa gallica",
+      common_name: "French Rose",
+      genus_id: genusRosa.id,
+    });
+
     console.log("Biological hierarchy seeded!");
 
     // --- Seed OrganismGroup ---
@@ -47,10 +60,19 @@ const seedDatabase = async () => {
       temperature: 30.0,
       humidity: 80,
     });
+    // Thêm Habitat mới
+    const habitatDesert = await models.Habitat.create({
+      name: "Desert",
+      description: "Hot and arid region with scarce vegetation.",
+      climate: "Arid",
+      temperature: 40.0,
+      humidity: 15,
+    });
 
     // Gắn Habitat với Species
     await models.SpeciesHabitat.create({ species_id: speciesLion.id, habitat_id: habitatSavanna.id });
     await models.SpeciesHabitat.create({ species_id: speciesLion.id, habitat_id: habitatForest.id });
+    await models.SpeciesHabitat.create({ species_id: speciesRose.id, habitat_id: habitatDesert.id });
 
     console.log("Habitats seeded!");
 
@@ -77,6 +99,13 @@ const seedDatabase = async () => {
       country: "Kenya",
       location: "Masai Mara",
       notes: "Found in large prides.",
+    });
+    await models.GeographicDistribution.create({
+      species_id: speciesRose.id,
+      region: "Europe",
+      country: "France",
+      location: "Southern France",
+      notes: "Cultivated as an ornamental plant.",
     });
 
     console.log("Geographic distributions seeded!");
