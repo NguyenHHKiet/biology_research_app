@@ -1,6 +1,6 @@
 import 'package:app/models/CardList.dart';
 import 'package:app/models/Colors.dart';
-import 'package:app/screens/profile/Profile.dart';
+import 'package:app/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,7 +59,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("Hello $name", style: _getTitleTextStyle(context)),
+        Text("Chào $name", style: _getTitleTextStyle(context)),
         InkWell(
           onTap: () {
             Navigator.push(

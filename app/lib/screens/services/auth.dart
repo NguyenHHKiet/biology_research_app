@@ -102,4 +102,99 @@ class AuthService {
   }
 
   // sign out
+  Future<void> signOutUser({
+    required BuildContext context,
+  }) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? currentUser = auth.currentUser;
+    if (currentUser != null) {
+      try {
+        await currentUser.delete().then((value) => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignIn(),
+            )));
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.code,
+              style: const TextStyle(fontSize: 18.0),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+// Change password
+  void changePassword({
+    required BuildContext context,
+    required String newPassword,
+  }) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    try {
+      await currentUser!.updatePassword(newPassword).then((value) {
+        {
+          Fluttertoast.showToast(
+            msg: "Mật khẩu đã thay đổi, hãy đăng nhập",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: MyColors.darkGreen,
+            textColor: Colors.white,
+          );
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SignIn(),
+              ));
+        }
+      });
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.code,
+            style: const TextStyle(fontSize: 18.0),
+          ),
+        ),
+      );
+    }
+  }
+
+  void changeEmail({
+    required BuildContext context,
+    required String newEmail,
+  }) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    try {
+      await currentUser!.updateEmail(newEmail).then((value) {
+        {
+          Fluttertoast.showToast(
+            msg: "Email đã thay đổi, hãy đăng nhập",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: MyColors.darkGreen,
+            textColor: Colors.white,
+          );
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SignIn(),
+              ));
+        }
+      });
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.code,
+            style: const TextStyle(fontSize: 18.0),
+          ),
+        ),
+      );
+    }
+  }
 }

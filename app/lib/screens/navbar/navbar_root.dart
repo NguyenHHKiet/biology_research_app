@@ -1,5 +1,6 @@
 import 'package:app/models/Colors.dart';
 import 'package:app/screens/home/home.dart';
+import 'package:app/screens/profile/Profile.dart';
 import 'package:app/screens/search/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class _NavBarRootState extends State<NavBarRoot> {
     _screens = [
       const Home(),
       const Search(),
-      const Center(child: Text("Cá nhân")),
+      const Profile(),
       const Center(child: Text("Cài đặt")),
     ];
 

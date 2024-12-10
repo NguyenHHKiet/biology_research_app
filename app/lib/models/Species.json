@@ -1,0 +1,641 @@
+{
+  "$id": "1",
+  "filteredSpecies": {
+    "$id": "2",
+    "$values": [
+      {
+        "$id": "3",
+        "scientificName": "Panthera leo",
+        "commonName": "Lion",
+        "genusId": 1,
+        "conservationStatusId": 2,
+
+        "imageUrl": "https://example.com/images/lion.jpg",
+        "taxonomyBrowser": "https://example.com/taxonomy/panthera-leo",
+        "isEndemic": true,
+        "genus": {
+          "$id": "4",
+          "name": "Panthera",
+          "familyId": 1,
+          "family": {
+            "$id": "5",
+
+            "name": "Felidae",
+            "orderId": 1,
+            "order": {
+              "$id": "6",
+              "name": "Carnivora",
+              "classId": 1,
+              "class": {
+                "$id": "7",
+                "name": "Mammalia",
+                "phylumId": 1,
+                "phylum": {
+                  "$id": "8",
+                  "name": "Chordata",
+                  "kingdomId": 1,
+                  "kingdom": {
+                    "$id": "9",
+                    "name": "Animalia",
+                    "phyla": {
+                      "$id": "10",
+                      "$values": [
+                        {
+                          "$ref": "8"
+                        }
+                      ]
+                    },
+                    "id": 1
+                  },
+                  "classes": {
+                    "$id": "11",
+                    "$values": [
+                      {
+                        "$ref": "7"
+                      }
+                    ]
+                  },
+                  "id": 1
+                },
+                "orders": {
+                  "$id": "12",
+                  "$values": [
+                    {
+                      "$ref": "6"
+                    }
+                  ]
+                },
+                "id": 1
+              },
+              "families": {
+                "$id": "13",
+                "$values": [
+                  {
+                    "$ref": "5"
+                  }
+                ]
+              },
+              "id": 1
+            },
+            "genera": {
+              "$id": "14",
+              "$values": [
+                {
+                  "$ref": "4"
+                }
+              ]
+            },
+            "id": 1
+          },
+          "species": {
+            "$id": "15",
+            "$values": [
+              {
+                "$ref": "3"
+              }
+            ]
+          },
+          "id": 1
+        },
+        "conservationStatus": {
+          "$id": "16",
+          "name": "Vulnerable",
+          "description": "Facing risk of extinction in the wild",
+          "severity": "Medium",
+          "species": {
+            "$id": "17",
+
+            "$values": [
+              {
+                "$ref": "3"
+              }
+            ]
+          },
+          "id": 2
+        },
+        "speciesHabitats": {
+          "$id": "18",
+
+          "$values": []
+        },
+        "geographicDistributions": {
+          "$id": "19",
+          "$values": [
+            {
+              "$id": "20",
+              "speciesId": 1,
+              "region": "Africa",
+              "country": "Kenya",
+              "location": "Savannah",
+
+              "notes": "Common in protected areas",
+              "species": {
+                "$ref": "3"
+              },
+              "id": 1
+            }
+          ]
+        },
+        "characteristics": {
+          "$id": "21",
+
+          "$values": []
+        },
+        "organismGroupSpecies": {
+          "$id": "22",
+          "$values": [
+            {
+              "$id": "23",
+              "organismGroupId": 1,
+              "speciesId": 1,
+              "organismGroup": {
+                "$id": "24",
+                "name": "Mammals",
+                "symbol": "M",
+                "organismGroupSpecies": {
+                  "$id": "25",
+                  "$values": [
+                    {
+                      "$ref": "23"
+                    }
+                  ]
+                },
+
+                "id": 1
+              },
+              "species": {
+                "$ref": "3"
+              },
+              "id": 1
+            }
+          ]
+        },
+        "speciesAuthors": {
+          "$id": "26",
+          "$values": [
+            {
+              "$id": "27",
+              "speciesId": 1,
+              "authorId": 1,
+              "species": {
+                "$ref": "3"
+              },
+              "author": null,
+              "id": 1
+            }
+          ]
+        },
+        "researchRecords": {
+          "$id": "28",
+          "$values": []
+        },
+        "researchRecordSpecies": {
+          "$id": "29",
+          "$values": [
+            {
+              "$id": "30",
+              "researchRecordId": 1,
+              "speciesId": 1,
+              "researchRecord": null,
+              "species": {
+                "$ref": "3"
+              },
+              "id": 1
+            }
+          ]
+        },
+        "id": 1
+      },
+      {
+        "$id": "31",
+        "scientificName": "Zea mays",
+        "commonName": "Corn",
+        "genusId": 2,
+        "conservationStatusId": 1,
+        "imageUrl": "https://example.com/images/corn.jpg",
+
+        "taxonomyBrowser": "https://example.com/taxonomy/zea-mays",
+        "isEndemic": true,
+        "genus": {
+          "$id": "32",
+          "name": "Zea",
+          "familyId": 2,
+          "family": {
+            "$id": "33",
+            "name": "Poaceae",
+            "orderId": 2,
+
+            "order": {
+              "$id": "34",
+              "name": "Poales",
+              "classId": 2,
+              "class": {
+                "$id": "35",
+                "name": "Magnoliopsida",
+                "phylumId": 2,
+                "phylum": {
+                  "$id": "36",
+
+                  "name": "Tracheophyta",
+                  "kingdomId": 2,
+                  "kingdom": {
+                    "$id": "37",
+                    "name": "Plantae",
+                    "phyla": {
+                      "$id": "38",
+                      "$values": [
+                        {
+                          "$ref": "36"
+                        }
+                      ]
+                    },
+                    "id": 2
+                  },
+                  "classes": {
+                    "$id": "39",
+                    "$values": [
+                      {
+                        "$ref": "35"
+                      }
+                    ]
+                  },
+                  "id": 2
+                },
+                "orders": {
+                  "$id": "40",
+                  "$values": [
+                    {
+                      "$ref": "34"
+                    }
+                  ]
+                },
+                "id": 2
+              },
+              "families": {
+                "$id": "41",
+                "$values": [
+                  {
+                    "$ref": "33"
+                  }
+                ]
+              },
+              "id": 2
+            },
+            "genera": {
+              "$id": "42",
+              "$values": [
+                {
+                  "$ref": "32"
+                }
+              ]
+            },
+
+            "id": 2
+          },
+          "species": {
+            "$id": "43",
+            "$values": [
+              {
+                "$ref": "31"
+              }
+            ]
+          },
+
+          "id": 2
+        },
+        "conservationStatus": {
+          "$id": "44",
+          "name": "Least Concern",
+          "description": "Not currently at risk",
+          "severity": "Low",
+          "species": {
+            "$id": "45",
+            "$values": [
+              {
+                "$ref": "31"
+              },
+              {
+                "$id": "46",
+                "scientificName": "Cordyceps militaris",
+                "commonName": "Caterpillar Fungus",
+                "genusId": 3,
+                "conservationStatusId": 1,
+                "imageUrl": "https://example.com/images/caterpillar-fungus.jpg",
+
+                "taxonomyBrowser": "https://example.com/taxonomy/cordyceps-militaris",
+                "isEndemic": false,
+                "genus": {
+                  "$id": "47",
+                  "name": "Cordyceps",
+                  "familyId": 3,
+                  "family": {
+                    "$id": "48",
+                    "name": "Clavicipitaceae",
+
+                    "orderId": 3,
+                    "order": {
+                      "$id": "49",
+                      "name": "Hypocreales",
+                      "classId": 3,
+                      "class": {
+                        "$id": "50",
+                        "name": "Sordariomycetes",
+                        "phylumId": 3,
+                        "phylum": {
+                          "$id": "51",
+
+                          "name": "Ascomycota",
+                          "kingdomId": 3,
+                          "kingdom": {
+                            "$id": "52",
+                            "name": "Fungi",
+                            "phyla": {
+                              "$id": "53",
+                              "$values": [
+                                {
+                                  "$ref": "51"
+                                }
+                              ]
+                            },
+                            "id": 3
+                          },
+                          "classes": {
+                            "$id": "54",
+                            "$values": [
+                              {
+                                "$ref": "50"
+                              }
+                            ]
+                          },
+                          "id": 3
+                        },
+                        "orders": {
+                          "$id": "55",
+                          "$values": [
+                            {
+                              "$ref": "49"
+                            }
+                          ]
+                        },
+                        "id": 3
+                      },
+                      "families": {
+                        "$id": "56",
+                        "$values": [
+                          {
+                            "$ref": "48"
+                          }
+                        ]
+                      },
+                      "id": 3
+                    },
+                    "genera": {
+                      "$id": "57",
+                      "$values": [
+                        {
+                          "$ref": "47"
+                        }
+                      ]
+                    },
+                    "id": 3
+                  },
+                  "species": {
+                    "$id": "58",
+                    "$values": [
+                      {
+                        "$ref": "46"
+                      }
+                    ]
+                  },
+
+                  "id": 3
+                },
+                "conservationStatus": {
+                  "$ref": "44"
+                },
+                "speciesHabitats": {
+                  "$id": "59",
+                  "$values": []
+                },
+                "geographicDistributions": {
+                  "$id": "60",
+                  "$values": [
+                    {
+                      "$id": "61",
+                      "speciesId": 3,
+                      "region": "Asia",
+                      "country": "China",
+                      "location": "Mountains",
+                      "notes": "Rare, used in traditional medicine",
+                      "species": {
+                        "$ref": "46"
+                      },
+                      "id": 3
+                    }
+                  ]
+                },
+                "characteristics": {
+                  "$id": "62",
+                  "$values": []
+                },
+                "organismGroupSpecies": {
+                  "$id": "63",
+                  "$values": [
+                    {
+                      "$id": "64",
+                      "organismGroupId": 3,
+                      "speciesId": 3,
+                      "organismGroup": {
+                        "$id": "65",
+                        "name": "Fungi",
+                        "symbol": "F",
+
+                        "organismGroupSpecies": {
+                          "$id": "66",
+                          "$values": [
+                            {
+                              "$ref": "64"
+                            }
+                          ]
+                        },
+                        "id": 3
+                      },
+                      "species": {
+                        "$ref": "46"
+                      },
+                      "id": 3
+                    }
+                  ]
+                },
+                "speciesAuthors": {
+                  "$id": "67",
+                  "$values": [
+                    {
+                      "$id": "68",
+                      "speciesId": 3,
+                      "authorId": 3,
+                      "species": {
+                        "$ref": "46"
+                      },
+                      "author": null,
+                      "id": 3
+                    }
+                  ]
+                },
+
+                "researchRecords": {
+                  "$id": "69",
+                  "$values": []
+                },
+                "researchRecordSpecies": {
+                  "$id": "70",
+                  "$values": [
+                    {
+                      "$id": "71",
+                      "researchRecordId": 3,
+
+                      "speciesId": 3,
+                      "researchRecord": null,
+                      "species": {
+                        "$ref": "46"
+                      },
+                      "id": 3
+                    }
+                  ]
+                },
+                "id": 3
+              }
+            ]
+          },
+          "id": 1
+        },
+        "speciesHabitats": {
+          "$id": "72",
+          "$values": []
+        },
+        "geographicDistributions": {
+          "$id": "73",
+
+          "$values": [
+            {
+              "$id": "74",
+              "speciesId": 2,
+              "region": "Americas",
+              "country": "USA",
+              "location": "Fields",
+              "notes": "Widely cultivated",
+              "species": {
+                "$ref": "31"
+              },
+
+              "id": 2
+            }
+          ]
+        },
+        "characteristics": {
+          "$id": "75",
+          "$values": []
+        },
+        "organismGroupSpecies": {
+          "$id": "76",
+
+          "$values": [
+            {
+              "$id": "77",
+              "organismGroupId": 2,
+              "speciesId": 2,
+              "organismGroup": {
+                "$id": "78",
+                "name": "Plants",
+                "symbol": "P",
+                "organismGroupSpecies": {
+                  "$id": "79",
+
+                  "$values": [
+                    {
+                      "$ref": "77"
+                    }
+                  ]
+                },
+                "id": 2
+              },
+              "species": {
+                "$ref": "31"
+              },
+              "id": 2
+            }
+          ]
+        },
+        "speciesAuthors": {
+          "$id": "80",
+          "$values": [
+            {
+              "$id": "81",
+              "speciesId": 2,
+
+              "authorId": 2,
+              "species": {
+                "$ref": "31"
+              },
+              "author": null,
+              "id": 2
+            }
+          ]
+        },
+        "researchRecords": {
+          "$id": "82",
+          "$values": []
+        },
+        "researchRecordSpecies": {
+          "$id": "83",
+          "$values": [
+            {
+              "$id": "84",
+              "researchRecordId": 2,
+              "speciesId": 2,
+              "researchRecord": null,
+
+              "species": {
+                "$ref": "31"
+              },
+              "id": 2
+            }
+          ]
+        },
+        "id": 2
+      },
+      {
+        "$ref": "46"
+      }
+    ]
+  },
+  "statistics": {
+    "$id": "85",
+    "totalSpecies": 3,
+    "totalRecords": 3,
+    "groupStatistics": {
+      "$id": "86",
+      "$values": [
+        {
+          "$id": "87",
+          "groupName": "Fungi",
+          "speciesCount": 1,
+          "recordCount": 1
+        },
+        {
+          "$id": "88",
+          "groupName": "Mammals",
+          "speciesCount": 1,
+
+          "recordCount": 1
+        },
+        {
+          "$id": "89",
+          "groupName": "Plants",
+          "speciesCount": 1,
+          "recordCount": 1
+        }
+      ]
+    }
+  }
+}
