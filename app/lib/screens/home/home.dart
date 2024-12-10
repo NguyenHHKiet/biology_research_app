@@ -88,6 +88,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ? Colors.green.shade50
           : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Xóa nút back
         elevation: 0,
         centerTitle: true,
         backgroundColor: Theme.of(context).brightness == Brightness.light
@@ -116,50 +117,80 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: ListView.builder(
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio:
+                0.8, // Adjust this value to control the card proportions
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
           itemCount: listOfCards.length,
           itemBuilder: (context, index) {
             final card = listOfCards[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                color: Theme.of(context).brightness == Brightness.light
-                    ? Colors.green.shade50
-                    : Theme.of(context).cardColor,
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(16.0),
-                  title: Text(
-                    card.title,
-                    style: TextStyle(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? MyColors.darkGreen
-                          : Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+            return Card(
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.green.shade50
+                  : Theme.of(context).cardColor,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                        child: AspectRatio(
+                          aspectRatio: 1, // Tỷ lệ vuông 1:1
+                          child: Image.asset(
+                            card.img,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  subtitle: Text(
-                    "${card.icon} ${card.ret} | ${card.calories}",
-                    style: TextStyle(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.black54
-                          : Colors.white60,
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          card.title,
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? MyColors.darkGreen
+                                    : Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "${card.icon} ${card.ret} | ${card.calories}",
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.black54
+                                    : Colors.white60,
+                            fontSize: 14,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
-                  trailing: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      card.img,
-                      height: 60,
-                      width: 60,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                ],
               ),
             );
           },
