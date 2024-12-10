@@ -408,7 +408,7 @@ class _ProfileState extends State<Profile> {
                 _buildProfileMenuItem(
                     title: "Đăng xuất",
                     icon: Icons.logout_rounded,
-                    onTap: () => _auth.signOutUser(context: context)),
+                    onTap: () => _auth.signOut(context)),
               ],
             ),
           ],

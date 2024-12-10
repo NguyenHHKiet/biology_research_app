@@ -238,7 +238,7 @@ class _SignInState extends State<SignIn> {
                                   email = emailController.text;
                                   password = passwordController.text;
                                 });
-                                await _auth.userSignIn(
+                                await _auth.signInWithEmailAndPassword(
                                   context: context,
                                   email: email,
                                   password: password,

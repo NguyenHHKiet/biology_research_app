@@ -9,192 +9,144 @@ import 'package:fluttertoast/fluttertoast.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  UserModel? _userFromUser(User user) {
+  UserModel? _userFromFirebaseUser(User? user) {
     return user != null ? UserModel(uid: user.uid) : null;
   }
 
-  // sign in anon
-  Future signInAnon() async {
+  void _showToast({
+    required String message,
+    required Color backgroundColor,
+  }) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
+    );
+  }
+
+  void _showSnackBar({
+    required BuildContext context,
+    required String message,
+    Color backgroundColor = MyColors.darkGreen,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: backgroundColor,
+        content: Text(
+          message,
+          style: const TextStyle(fontSize: 18.0),
+        ),
+      ),
+    );
+  }
+
+  void _navigateTo(BuildContext context, Widget page) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
+  }
+
+  // Sign in anonymously
+  Future<UserModel?> signInAnonymously() async {
     try {
       UserCredential result = await _auth.signInAnonymously();
-      User? user = result.user;
-      return _userFromUser(user!);
+      return _userFromFirebaseUser(result.user);
     } catch (e) {
-      print(e.toString());
+      print("SignInAnon Error: ${e.toString()}");
       return null;
     }
   }
 
-  // sign in with email and password
-  Future<void> userSignIn({
+  // Sign in with email and password
+  Future<void> signInWithEmailAndPassword({
     required BuildContext context,
     required String email,
     required String password,
   }) async {
     try {
-      await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) {
-        Fluttertoast.showToast(
-          msg: "Đăng nhập thành công",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: MyColors.darkGreen,
-          textColor: Colors.white,
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const NavBarRoot()),
-        );
-      });
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      _showToast(
+          message: "Đăng nhập thành công", backgroundColor: MyColors.darkGreen);
+      _navigateTo(context, const NavBarRoot());
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: MyColors.darkGreen,
-          content: Text(
-            e.code,
-            style: const TextStyle(fontSize: 18.0),
-          ),
-        ),
-      );
+      _showSnackBar(
+          context: context, message: e.message ?? "Đăng nhập thất bại");
     }
   }
 
-  // register with email and password
-  Future<void> registration({
+  // Register with email and password
+  Future<void> registerUser({
     required BuildContext context,
     required String email,
     required String password,
   }) async {
     try {
-      print('$email $password');
-
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((_) {
-        Fluttertoast.showToast(
-            msg: "Đăng ký thành công, hãy đăng nhập",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: MyColors.darkGreen,
-            textColor: Colors.white,
-            fontSize: 16.0);
-
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignIn(),
-            ));
-      });
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      _showToast(
+          message: "Đăng ký thành công, hãy đăng nhập",
+          backgroundColor: MyColors.darkGreen);
+      _navigateTo(context, const SignIn());
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: MyColors.darkGreen,
-          content: Text(
-            e.code,
-            style: const TextStyle(fontSize: 18.0),
-          ),
-        ),
-      );
+      _showSnackBar(context: context, message: e.message ?? "Đăng ký thất bại");
     }
   }
 
-  // sign out
-  Future<void> signOutUser({
-    required BuildContext context,
-  }) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? currentUser = auth.currentUser;
-    if (currentUser != null) {
-      try {
-        await currentUser.delete().then((value) => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignIn(),
-            )));
-      } on FirebaseAuthException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              e.code,
-              style: const TextStyle(fontSize: 18.0),
-            ),
-          ),
-        );
-      }
+  // Sign out user
+  Future<void> signOut(BuildContext context) async {
+    try {
+      await _auth.signOut();
+      _navigateTo(context, const SignIn());
+    } catch (e) {
+      _showSnackBar(context: context, message: "Đăng xuất thất bại");
     }
   }
 
-// Change password
-  void changePassword({
+  // Change password
+  Future<void> changePassword({
     required BuildContext context,
     required String newPassword,
   }) async {
-    final currentUser = FirebaseAuth.instance.currentUser;
     try {
-      await currentUser!.updatePassword(newPassword).then((value) {
-        {
-          Fluttertoast.showToast(
-            msg: "Mật khẩu đã thay đổi, hãy đăng nhập",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: MyColors.darkGreen,
-            textColor: Colors.white,
-          );
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SignIn(),
-              ));
-        }
-      });
-    } on FirebaseException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.code,
-            style: const TextStyle(fontSize: 18.0),
-          ),
-        ),
-      );
+      final user = _auth.currentUser;
+      if (user != null) {
+        await user.updatePassword(newPassword);
+        _showToast(
+            message: "Mật khẩu đã thay đổi, hãy đăng nhập",
+            backgroundColor: MyColors.darkGreen);
+        _navigateTo(context, const SignIn());
+      } else {
+        _showSnackBar(context: context, message: "Người dùng chưa đăng nhập");
+      }
+    } on FirebaseAuthException catch (e) {
+      _showSnackBar(
+          context: context, message: e.message ?? "Đổi mật khẩu thất bại");
     }
   }
 
-  void changeEmail({
+  // Change email
+  Future<void> changeEmail({
     required BuildContext context,
     required String newEmail,
   }) async {
-    final currentUser = FirebaseAuth.instance.currentUser;
     try {
-      await currentUser!.updateEmail(newEmail).then((value) {
-        {
-          Fluttertoast.showToast(
-            msg: "Email đã thay đổi, hãy đăng nhập",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: MyColors.darkGreen,
-            textColor: Colors.white,
-          );
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SignIn(),
-              ));
-        }
-      });
-    } on FirebaseException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.code,
-            style: const TextStyle(fontSize: 18.0),
-          ),
-        ),
-      );
+      final user = _auth.currentUser;
+      if (user != null) {
+        await user.updateEmail(newEmail);
+        _showToast(
+            message: "Email đã thay đổi, hãy đăng nhập",
+            backgroundColor: MyColors.darkGreen);
+        _navigateTo(context, const SignIn());
+      } else {
+        _showSnackBar(context: context, message: "Người dùng chưa đăng nhập");
+      }
+    } on FirebaseAuthException catch (e) {
+      _showSnackBar(
+          context: context, message: e.message ?? "Đổi email thất bại");
     }
   }
 }

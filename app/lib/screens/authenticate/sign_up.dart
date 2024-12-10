@@ -277,7 +277,7 @@ class _SignUpState extends State<SignUp> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               saveValue();
-                              await _auth.registration(
+                              await _auth.registerUser(
                                 context: context,
                                 email: emailController.text,
                                 password: passwordController.text,
