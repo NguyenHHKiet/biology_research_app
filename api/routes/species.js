@@ -28,6 +28,11 @@ router
           as: "conservationStatus",
           attributes: ["id", "description"],
         },
+        { model: models.Characteristic, as: "characteristics" },
+        {
+          model: models.Habitat,
+          as: "habitats",
+        },
       ],
     }),
     getAllSpecies,

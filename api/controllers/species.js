@@ -17,7 +17,7 @@ exports.getAllSpecies = asyncHandler(async (req, res) => {
 // @route   GET /api/v1/species/:id
 // @access  Public
 exports.getSingleSpecies = asyncHandler(async (req, res) => {
-  const species = await Species.findById(req.params.id);
+  const species = await Species.findByPk(req.params.id);
 
   if (!species) {
     return res.status(404).json({
