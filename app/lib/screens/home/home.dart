@@ -69,7 +69,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.asset(
-              "assets/pretty.jpg",
+              "assets/pretty.jpg", // Hình ảnh đại diện cho người dùng
               height: 40,
               width: 40,
               fit: BoxFit.cover,
@@ -87,7 +87,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ? Colors.green.shade50
             : Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          automaticallyImplyLeading: false, // Xóa nút back
+          automaticallyImplyLeading: false,
           elevation: 0,
           centerTitle: true,
           backgroundColor: Theme.of(context).brightness == Brightness.light
@@ -95,6 +95,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               : Theme.of(context).scaffoldBackgroundColor,
           iconTheme: const IconThemeData(color: MyColors.darkGreen),
           title: FutureBuilder<String?>(
+            // Tên người dùng sẽ được hiển thị ở đây
             future: _nameFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -114,8 +115,65 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             },
           ),
         ),
-        body: Center(
-            child: Text(
-                "Cơ sở dữ liệu đa dạng sinh học Vườn Quốc gia U Minh Thượng")));
+        body: AnimatedContainer(
+          duration: const Duration(seconds: 2), // Thời gian hiệu ứng
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  'assets/nature_background.jpg'), // Hình ảnh nền về sinh vật học
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Cơ sở dữ liệu đa dạng sinh học Vườn Quốc gia U Minh Thượng",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.green
+                        : Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black.withOpacity(0.5),
+                        offset: const Offset(3.0, 3.0),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                AnimatedOpacity(
+                  opacity: 1.0,
+                  duration: const Duration(seconds: 2),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Thêm hành động khi nhấn nút
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text(
+                      'Khám Phá Ngay',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }
