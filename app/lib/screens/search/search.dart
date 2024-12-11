@@ -1,5 +1,5 @@
-import 'package:app/models/CardList.dart';
-import 'package:app/models/Colors.dart';
+import 'package:app/models/Species.dart';
+import 'package:app/services/api_species.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
@@ -11,21 +11,49 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final TextEditingController _searchController = TextEditingController();
-  List<CardList> _filteredCards = [];
+  List<Species> _species = [];
+  List<Species> _filteredSpecies = [];
+  bool _isLoading = false;
+  bool _hasError = false;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    _filteredCards = listOfCards;
+    fetchSpecies();
   }
 
-  void _filterCards(String query) {
+  void _filterSpecies(String query) {
     setState(() {
-      _filteredCards = listOfCards
-          .where(
-              (card) => card.title.toLowerCase().contains(query.toLowerCase()))
+      _filteredSpecies = _species
+          .where((species) =>
+              species.commonName.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
+  }
+
+  Future<void> fetchSpecies() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+      _errorMessage = null;
+    });
+
+    try {
+      final apiSpecies = ApiSpecies();
+      final speciesList = await apiSpecies.fetchSpecies();
+      setState(() {
+        _species = speciesList;
+        _filteredSpecies = speciesList;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _hasError = true;
+        _errorMessage = e.toString();
+      });
+    }
   }
 
   @override
@@ -44,13 +72,13 @@ class _SearchState extends State<Search> {
             : Theme.of(context).scaffoldBackgroundColor,
         title: TextField(
           controller: _searchController,
-          onChanged: _filterCards,
+          onChanged: _filterSpecies,
           decoration: InputDecoration(
             hintText: 'Tìm kiếm...',
             prefixIcon: Icon(
               Icons.search,
               color: Theme.of(context).brightness == Brightness.light
-                  ? MyColors.darkGreen
+                  ? Colors.green
                   : Colors.white,
             ),
             suffixIcon: _searchController.text.isNotEmpty
@@ -58,12 +86,12 @@ class _SearchState extends State<Search> {
                     icon: Icon(
                       Icons.clear,
                       color: Theme.of(context).brightness == Brightness.light
-                          ? MyColors.darkGreen
+                          ? Colors.green
                           : Colors.white,
                     ),
                     onPressed: () {
                       _searchController.clear();
-                      _filterCards('');
+                      _filterSpecies('');
                     },
                   )
                 : null,
@@ -78,97 +106,106 @@ class _SearchState extends State<Search> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: _filteredCards.isEmpty
-            ? Center(
-                child: Text(
-                  'Không tìm thấy kết quả',
-                  style: TextStyle(
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? MyColors.darkGreen
-                        : Colors.white,
-                  ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _hasError
+              ? _buildErrorState()
+              : _buildSearchResults(),
+    );
+  }
+
+  Widget _buildErrorState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Lỗi tải dữ liệu',
+            style: TextStyle(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.red
+                  : Colors.white,
+            ),
+          ),
+          if (_errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                _errorMessage!,
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.grey
+                      : Colors.grey[400],
+                  fontSize: 14,
                 ),
-              )
-            : GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.8,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: _filteredCards.length,
-                itemBuilder: (context, index) {
-                  final card = _filteredCards[index];
-                  return Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? Colors.green.shade50
-                        : Theme.of(context).cardColor,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(20),
-                              ),
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: Image.asset(
-                                  card.img,
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                card.title,
-                                style: TextStyle(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? MyColors.darkGreen
-                                      : Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                "${card.icon} ${card.ret} | ${card.calories}",
-                                style: TextStyle(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.black54
-                                      : Colors.white60,
-                                  fontSize: 14,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                textAlign: TextAlign.center,
               ),
+            ),
+          ElevatedButton(
+            onPressed: fetchSpecies,
+            child: const Text('Thử lại'),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildSearchResults() {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: _filteredSpecies.isEmpty
+          ? Center(
+              child: Text(
+                'Không tìm thấy kết quả',
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.green
+                      : Colors.white,
+                ),
+              ),
+            )
+          : GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.8,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemCount: _filteredSpecies.length,
+              itemBuilder: (context, index) {
+                final species = _filteredSpecies[index];
+                return Card(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.green.shade50
+                      : Theme.of(context).cardColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            species.commonName,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Colors.green
+                                  : Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
     );
   }
 }
