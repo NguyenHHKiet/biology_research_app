@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const helmet = require("helmet");
+const compression = require("compression");
 const cors = require("cors");
 
 const setupAssociations = require("./config/setupAssociations"); // Hàm thiết lập associations
@@ -20,7 +22,12 @@ const PORT = process.env.API_PORT || 4040;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan("dev"));
+// Dev logging middleware
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+app.use(helmet());
+app.use(compression());
 
 // Endpoint gốc để kiểm tra server
 app.get("/", (req, res) => {
