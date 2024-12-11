@@ -66,55 +66,66 @@ class _NavBarRootState extends State<NavBarRoot> {
         backgroundColor: brightness == Brightness.light
             ? Colors.green.shade50
             : theme.scaffoldBackgroundColor,
-        body: PageView(
-          controller: _pageController,
-          physics:
-              const NeverScrollableScrollPhysics(), // Ngăn chặn vuốt chuyển trang
-          children: _screens,
-        ),
-        bottomNavigationBar: SizedBox(
-          height: 64,
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(30),
-              topLeft: Radius.circular(30),
+        body: Stack(
+          children: [
+            // Phần nội dung màn hình chiếm hết không gian
+            PageView(
+              controller: _pageController,
+              physics:
+                  const NeverScrollableScrollPhysics(), // Ngăn chặn vuốt chuyển trang
+              children: _screens,
             ),
-            child: BottomNavigationBar(
-              backgroundColor: brightness == Brightness.light
-                  ? Colors.green.shade300
-                  : Colors.black,
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: brightness == Brightness.light
-                  ? MyColors.darkGreen
-                  : Colors.white,
-              unselectedItemColor: Colors.white60,
-              showUnselectedLabels: false,
-              selectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
+            // BottomNavigationBar nằm ở dưới cùng với kiểu absolute
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                height: 64,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(30),
+                    topLeft: Radius.circular(30),
+                  ),
+                  child: BottomNavigationBar(
+                    backgroundColor: brightness == Brightness.light
+                        ? Colors.green.shade300
+                        : Colors.black,
+                    type: BottomNavigationBarType.fixed,
+                    selectedItemColor: brightness == Brightness.light
+                        ? MyColors.darkGreen
+                        : Colors.white,
+                    unselectedItemColor: Colors.white60,
+                    showUnselectedLabels: false,
+                    selectedLabelStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                    currentIndex: _selectedIndex,
+                    onTap: _onItemTapped,
+                    items: const [
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.house_rounded),
+                        label: "Trang chủ",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(CupertinoIcons.search_circle_fill),
+                        label: "Tra cứu",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.person_2_rounded),
+                        label: "Cá nhân",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(CupertinoIcons.settings),
+                        label: "Cài đặt",
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              currentIndex: _selectedIndex,
-              onTap: _onItemTapped,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.house_rounded),
-                  label: "Trang chủ",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.search_circle_fill),
-                  label: "Tra cứu",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_2_rounded),
-                  label: "Cá nhân",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.settings),
-                  label: "Cài đặt",
-                ),
-              ],
             ),
-          ),
+          ],
         ),
       ),
     );

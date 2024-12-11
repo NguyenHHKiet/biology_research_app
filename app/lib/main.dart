@@ -1,8 +1,7 @@
 import 'package:app/provider/login_sharedpreference_provider.dart';
 import 'package:app/provider/match_data_provider.dart';
 import 'package:app/provider/theme_changer_provider.dart';
-import 'package:app/screens/navbar/navbar_root.dart';
-import 'package:app/widgets/on_boarding_widget.dart';
+import 'package:app/screens/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -62,23 +61,7 @@ class _BiologyResearchAppState extends State<BiologyResearchApp> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return Builder(builder: (BuildContext context) {
-            return Consumer<LoginSharedPreferenceProvider>(
-                builder: (context, provider, _) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Biology Research App',
-                themeMode: Provider.of<ThemeChanger>(context).themeMode,
-                theme: ThemeData(brightness: Brightness.light),
-                darkTheme: ThemeData(
-                  brightness: Brightness.dark,
-                ),
-                home: provider.getBoolLogin == true
-                    ? const NavBarRoot()
-                    : const OnBoardingWidget(),
-              );
-            });
-          });
+          return const Wrapper();
         });
   }
 }

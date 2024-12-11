@@ -152,7 +152,7 @@ class _ProfileState extends State<Profile> {
             children: [
               ClipOval(
                 child: Image.asset(
-                  "assets/hypeteq.jfif",
+                  "assets/pretty/jpg",
                   height: 60,
                   width: 70,
                 ),
@@ -190,7 +190,7 @@ class _ProfileState extends State<Profile> {
                 InkWell(
                   onTap: _launchWebsite,
                   child: const Text(
-                    "hypeteq.com",
+                    "perception.com",
                     style: TextStyle(
                       color: Colors.blueAccent,
                       decoration: TextDecoration.underline,

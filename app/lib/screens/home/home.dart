@@ -129,13 +129,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Cơ sở dữ liệu đa dạng sinh học Vườn Quốc gia U Minh Thượng",
+                  "Cơ sở dữ liệu đa dạng sinh học \nVườn Quốc gia U Minh Thượng",
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).brightness == Brightness.light
-                        ? Colors.green
-                        : Colors.white,
+                        ? Colors.white
+                        : Colors.green,
                     shadows: [
                       Shadow(
                         blurRadius: 10.0,
