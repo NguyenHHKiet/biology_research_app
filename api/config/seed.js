@@ -33,8 +33,6 @@ const seedDatabase = async () => {
       genus_id: genusRosa.id,
     });
 
-    console.log("Biological hierarchy seeded!");
-
     // --- Seed OrganismGroup ---
     const groupMammals = await models.OrganismGroup.create({ name: "Mammals", symbol: "MAM" });
     const groupCarnivores = await models.OrganismGroup.create({ name: "Carnivores", symbol: "CAR" });
@@ -42,8 +40,6 @@ const seedDatabase = async () => {
     // Gắn Species với OrganismGroup
     await models.OrganismGroupSpecies.create({ organism_group_id: groupMammals.id, species_id: speciesLion.id });
     await models.OrganismGroupSpecies.create({ organism_group_id: groupCarnivores.id, species_id: speciesLion.id });
-
-    console.log("Organism groups seeded!");
 
     // --- Seed Habitat ---
     const habitatSavanna = await models.Habitat.create({
@@ -60,7 +56,6 @@ const seedDatabase = async () => {
       temperature: 30.0,
       humidity: 80,
     });
-    // Thêm Habitat mới
     const habitatDesert = await models.Habitat.create({
       name: "Desert",
       description: "Hot and arid region with scarce vegetation.",
@@ -73,8 +68,6 @@ const seedDatabase = async () => {
     await models.SpeciesHabitat.create({ species_id: speciesLion.id, habitat_id: habitatSavanna.id });
     await models.SpeciesHabitat.create({ species_id: speciesLion.id, habitat_id: habitatForest.id });
     await models.SpeciesHabitat.create({ species_id: speciesRose.id, habitat_id: habitatDesert.id });
-
-    console.log("Habitats seeded!");
 
     // --- Seed Characteristic ---
     await models.Characteristic.create({
@@ -89,8 +82,6 @@ const seedDatabase = async () => {
       value: "150-225",
       units: "kg",
     });
-
-    console.log("Characteristics seeded!");
 
     // --- Seed GeographicDistribution ---
     await models.GeographicDistribution.create({
@@ -108,8 +99,6 @@ const seedDatabase = async () => {
       notes: "Cultivated as an ornamental plant.",
     });
 
-    console.log("Geographic distributions seeded!");
-
     // --- Seed Author ---
     const authorJane = await models.Author.create({ name: "Jane Doe", affiliation: "University of Wildlife" });
     const authorJohn = await models.Author.create({ name: "John Smith", affiliation: "African Research Institute" });
@@ -118,17 +107,13 @@ const seedDatabase = async () => {
     await models.SpeciesAuthor.create({ species_id: speciesLion.id, author_id: authorJane.id });
     await models.SpeciesAuthor.create({ species_id: speciesLion.id, author_id: authorJohn.id });
 
-    console.log("Authors seeded!");
-
     // --- Seed ConservationStatus ---
     await models.ConservationStatus.create({
       species_id: speciesLion.id,
       name: "Lion Conservation",
-      status: "Vulnerable",
-      notes: "Population declining due to habitat loss.",
+      severity: "Vulnerable",
+      description: "Population declining due to habitat loss.",
     });
-
-    console.log("Conservation statuses seeded!");
 
     console.log("All data seeded successfully!");
   } catch (error) {

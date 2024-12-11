@@ -1,9 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const { sequelize, models } = require("./models"); // Import Sequelize instance và tất cả các models
+
 const setupAssociations = require("./config/setupAssociations"); // Hàm thiết lập associations
 const seedDatabase = require("./config/seed"); // Hàm seed dữ liệu mẫu
+const errorHandler = require("./middleware/error");
+const ErrorResponse = require("./utils/errorResponse");
+
+const { sequelize, models } = require("./models"); // Import Sequelize instance và tất cả các models
+
 require("dotenv").config(); // Để load các biến môi trường từ file .env
 
 // Khởi tạo ứng dụng Express
@@ -21,18 +26,32 @@ app.get("/", (req, res) => {
 });
 
 // Import và thiết lập các routes
-const speciesRoutes = require("./routes/speciesRoutes");
-app.use("/species", speciesRoutes); // Tất cả endpoint liên quan đến species
+const speciesRoutes = require("./routes/species");
+app.use("/api/v1/species", speciesRoutes); // Tất cả endpoint liên quan đến species
+
+// next handler error if something goes wrong
+app.use((req, res, next) => {
+  // Error goes via `next()` method now
+  setImmediate(() => {
+    next(new ErrorResponse("Something went wrong!!!", 500));
+  });
+});
+
+app.use(errorHandler);
 
 // Hàm khởi động server và thiết lập database
 const startServer = async () => {
   try {
-    console.log("Starting server...");
-
     // Kết nối tới database
     console.log("Connecting to database...");
-    await sequelize.authenticate();
-    console.log("Database connected successfully!");
+    await sequelize
+      .authenticate()
+      .then(() => {
+        console.log("Database connected successfully.");
+      })
+      .catch(error => {
+        console.error("Unable to connect to the database:", error);
+      });
 
     // Thiết lập associations
     console.log("Setting up associations...");

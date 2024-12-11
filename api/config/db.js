@@ -20,7 +20,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   dialect: DB_DIALECT,
   pool: DB_POOL,
-  logging: process.env.NODE_ENV !== "development", // Log SQL queries trong môi trường development
+  logging: false, // Log SQL queries trong môi trường development
   dialectOptions: {
     useUTC: false, // Disable UTC for timezone handling
   },
