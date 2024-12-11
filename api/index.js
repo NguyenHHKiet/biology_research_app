@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const setupAssociations = require("./config/setupAssociations"); // Hàm thiết lập associations
 const seedDatabase = require("./config/seed"); // Hàm seed dữ liệu mẫu
@@ -16,6 +17,7 @@ const app = express();
 const PORT = process.env.API_PORT || 4040;
 
 // Middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
