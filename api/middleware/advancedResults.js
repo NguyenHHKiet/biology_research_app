@@ -4,18 +4,19 @@ const advancedResults =
     try {
       const { include = [], where = {}, attributes = null } = options;
 
-      // Copy req.query
+      // Clone query parameters
       const reqQuery = { ...req.query };
 
-      // Fields to exclude
+      // Fields to exclude from filtering
       const removeFields = ["select", "sort", "page", "limit"];
-      removeFields.forEach(param => delete reqQuery[param]);
+      removeFields.forEach(field => delete reqQuery[field]);
 
-      // Advanced filtering (e.g., gt, gte, lt, lte)
+      // Advanced filtering (e.g., gt, gte, lt, lte, in)
       for (const [key, value] of Object.entries(reqQuery)) {
-        if (/^(gt|gte|lt|lte|in)$/.test(key)) {
-          const opKey = `$${key}`;
-          where[key.replace(/\[\w+\]/, "")] = { [opKey]: value };
+        const match = key.match(/\[(gt|gte|lt|lte|in)\]/);
+        if (match) {
+          const opKey = `$${match[1]}`;
+          where[key.replace(/\[.+\]/, "")] = { [opKey]: value };
         } else {
           where[key] = value;
         }
@@ -27,22 +28,22 @@ const advancedResults =
         selectAttributes = req.query.select.split(",");
       }
 
-      // Sort
+      // Sorting
       let order = [];
       if (req.query.sort) {
-        const sortFields = req.query.sort.split(",");
-        order = sortFields.map(field => (field.startsWith("-") ? [field.substring(1), "DESC"] : [field, "ASC"]));
+        order = req.query.sort
+          .split(",")
+          .map(field => (field.startsWith("-") ? [field.slice(1), "DESC"] : [field, "ASC"]));
       } else {
-        // Default sort by createdAt desc
-        order.push(["createdAt", "DESC"]);
+        order.push(["createdAt", "DESC"]); // Default sort by createdAt
       }
 
       // Pagination
       const page = parseInt(req.query.page, 10) || 1;
-      const limit = parseInt(req.query.limit, 10) || 5;
+      const limit = parseInt(req.query.limit, 10) || 10;
       const offset = (page - 1) * limit;
 
-      // Fetch data with Sequelize
+      // Query using Sequelize
       const { count, rows } = await model.findAndCountAll({
         where,
         include,
@@ -52,24 +53,18 @@ const advancedResults =
         offset,
       });
 
-      // Pagination result
+      // Prepare pagination response
       const pagination = {};
       if (offset + limit < count) {
-        pagination.next = {
-          page: page + 1,
-          limit,
-        };
+        pagination.next = { page: page + 1, limit };
       }
       if (offset > 0) {
-        pagination.prev = {
-          page: page - 1,
-          limit,
-        };
+        pagination.prev = { page: page - 1, limit };
       }
 
       res.advancedResults = {
         success: true,
-        count: rows.length,
+        count,
         pagination,
         data: rows,
       };
