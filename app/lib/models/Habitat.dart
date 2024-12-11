@@ -1,10 +1,9 @@
-// model/habitat.dart
 class Habitat {
   final int id;
   final String name;
   final String description;
   final String climate;
-  final double temperature;
+  final int temperature;
   final int humidity;
 
   Habitat({
@@ -22,7 +21,7 @@ class Habitat {
       name: json['name'],
       description: json['description'],
       climate: json['climate'],
-      temperature: json['temperature'].toDouble(),
+      temperature: json['temperature'],
       humidity: json['humidity'],
     );
   }

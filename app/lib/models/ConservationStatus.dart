@@ -1,14 +1,19 @@
-// model/conservation_status.dart
 class ConservationStatus {
-  final int id;
   final String description;
+  final String severity;
+  final String name;
 
-  ConservationStatus({required this.id, required this.description});
+  ConservationStatus({
+    required this.description,
+    required this.severity,
+    required this.name,
+  });
 
   factory ConservationStatus.fromJson(Map<String, dynamic> json) {
     return ConservationStatus(
-      id: json['id'],
       description: json['description'],
+      severity: json['severity'],
+      name: json['name'],
     );
   }
 }
