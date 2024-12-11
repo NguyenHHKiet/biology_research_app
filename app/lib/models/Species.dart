@@ -1,5 +1,6 @@
 import 'ConservationStatus.dart';
 import 'Habitat.dart';
+import 'taxonomy/Genus.dart';
 
 class Species {
   final int id;
@@ -7,6 +8,7 @@ class Species {
   final String commonName;
   final ConservationStatus? conservationStatus;
   final List<Habitat> habitats;
+  final Genus? genus;
 
   Species({
     required this.id,
@@ -14,6 +16,7 @@ class Species {
     required this.commonName,
     this.conservationStatus,
     required this.habitats,
+    this.genus,
   });
 
   factory Species.fromJson(Map<String, dynamic> json) {
@@ -25,12 +28,17 @@ class Species {
       conservationStatus =
           ConservationStatus.fromJson(json['conservationStatus']);
     }
+    Genus? genus;
+    if (json['genus'] != null) {
+      genus = Genus.fromJson(json['genus']);
+    }
     return Species(
       id: json['id'],
       scientificName: json['scientific_name'],
       commonName: json['common_name'],
       conservationStatus: conservationStatus,
       habitats: habitatsList,
+      genus: genus,
     );
   }
 }

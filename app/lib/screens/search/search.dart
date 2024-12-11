@@ -20,6 +20,12 @@ class _SearchState extends State<Search> {
   // Lưu trữ các lựa chọn lọc
   String? _selectedConservationStatus;
   String? _selectedHabitat;
+  String? _selectedGenus;
+  String? _selectedFamily;
+  String? _selectedOrder;
+  String? _selectedClass;
+  String? _selectedPhylum;
+  String? _selectedKingdom;
 
   @override
   void initState() {
@@ -66,8 +72,30 @@ class _SearchState extends State<Search> {
             species.conservationStatus?.severity == _selectedConservationStatus;
         bool matchesHabitat = _selectedHabitat == null ||
             species.habitats.any((habitat) => habitat.name == _selectedHabitat);
+        bool matchesGenus =
+            _selectedGenus == null || species.genus?.name == _selectedGenus;
+        bool matchesFamily = _selectedFamily == null ||
+            species.genus?.family.name == _selectedFamily;
+        bool matchesOrder = _selectedOrder == null ||
+            species.genus?.family.order.name == _selectedOrder;
+        bool matchesClass = _selectedClass == null ||
+            species.genus?.family.order.classData.name == _selectedClass;
+        bool matchesPhylum = _selectedPhylum == null ||
+            species.genus?.family.order.classData.phylum.name ==
+                _selectedPhylum;
+        bool matchesKingdom = _selectedKingdom == null ||
+            species.genus?.family.order.classData.phylum.kingdom.name ==
+                _selectedKingdom;
 
-        return matchesQuery && matchesConservationStatus && matchesHabitat;
+        return matchesQuery &&
+            matchesConservationStatus &&
+            matchesHabitat &&
+            matchesGenus &&
+            matchesFamily &&
+            matchesOrder &&
+            matchesClass &&
+            matchesPhylum &&
+            matchesKingdom;
       }).toList();
     });
   }
@@ -206,32 +234,140 @@ class _SearchState extends State<Search> {
                     );
                   }).toList(),
                 ),
+                const SizedBox(height: 16),
+                // DropdownButton cho Genus
+                const Text('Lọc theo Genus:'),
+                DropdownButton<String>(
+                  value: _selectedGenus,
+                  hint: const Text('Chọn Genus'),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedGenus = newValue;
+                    });
+                  },
+                  items: ['Rosa', 'Panthera', 'Homo']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 16),
+                // DropdownButton cho Family
+                const Text('Lọc theo Family:'),
+                DropdownButton<String>(
+                  value: _selectedFamily,
+                  hint: const Text('Chọn Family'),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedFamily = newValue;
+                    });
+                  },
+                  items: ['Rosaceae', 'Felidae', 'Hominidae']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 16),
+                // DropdownButton cho Order
+                const Text('Lọc theo Order:'),
+                DropdownButton<String>(
+                  value: _selectedOrder,
+                  hint: const Text('Chọn Order'),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedOrder = newValue;
+                    });
+                  },
+                  items: ['Rosales', 'Carnivora', 'Primates']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 16),
+                // DropdownButton cho Class
+                const Text('Lọc theo Class:'),
+                DropdownButton<String>(
+                  value: _selectedClass,
+                  hint: const Text('Chọn Class'),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedClass = newValue;
+                    });
+                  },
+                  items: ['Magnoliopsida', 'Mammalia', 'Aves']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 16),
+                // DropdownButton cho Phylum
+                const Text('Lọc theo Phylum:'),
+                DropdownButton<String>(
+                  value: _selectedPhylum,
+                  hint: const Text('Chọn Phylum'),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedPhylum = newValue;
+                    });
+                  },
+                  items: ['Magnoliophyta', 'Chordata']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 16),
+                // DropdownButton cho Kingdom
+                const Text('Lọc theo Kingdom:'),
+                DropdownButton<String>(
+                  value: _selectedKingdom,
+                  hint: const Text('Chọn Kingdom'),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedKingdom = newValue;
+                    });
+                  },
+                  items: ['Plantae', 'Animalia']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ],
             ),
           ),
           actions: [
             // Nút Xóa hết lựa chọn
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _selectedConservationStatus = null;
-                  _selectedHabitat = null;
+                  _filteredSpecies = _species;
                 });
+                Navigator.pop(context);
               },
-              child: const Text('Xóa hết lựa chọn'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Đóng'),
+              child: const Text('Xóa lọc'),
             ),
             ElevatedButton(
               onPressed: () {
                 _filterSpecies(_searchController.text);
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
-              child: const Text('Áp dụng'),
+              child: const Text('Lọc'),
             ),
           ],
         );
