@@ -26,10 +26,10 @@ app.get("/", (req, res) => {
 });
 
 // Import và thiết lập các routes
-const speciesRoutes = require("./routes/species");
-app.use("/api/v1/species", speciesRoutes); // Tất cả endpoint liên quan đến species
+const apiRoutes = require("./routes");
+app.use("/api/v1", apiRoutes);
 
-// next handler error if something goes wrong
+// Next handler error if something goes wrong
 app.use((req, res, next) => {
   // Error goes via `next()` method now
   setImmediate(() => {
