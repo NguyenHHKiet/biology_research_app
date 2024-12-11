@@ -1,5 +1,5 @@
 const {
-  model: { Author },
+  models: { Author },
 } = require("../models");
 
 // * Create a new author based on data from Firebase.
