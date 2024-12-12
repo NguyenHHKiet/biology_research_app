@@ -100,6 +100,7 @@ class _SearchState extends State<Search> {
     });
   }
 
+  // Error Result
   Widget _buildErrorState() {
     return Center(
       child: Column(
@@ -132,6 +133,7 @@ class _SearchState extends State<Search> {
     );
   }
 
+  // Main Screen
   Widget _buildSearchResults() {
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -155,6 +157,7 @@ class _SearchState extends State<Search> {
     );
   }
 
+  // Thiết kế Card UI Item
   Widget _buildSpeciesCard(Species species) {
     return Card(
       elevation: 3,
@@ -163,23 +166,56 @@ class _SearchState extends State<Search> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(species.commonName,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Text(species.scientificName,
-                style:
-                    const TextStyle(fontSize: 16, fontStyle: FontStyle.italic)),
-            if (species.conservationStatus != null)
-              Text('Status: ${species.conservationStatus!.severity}',
-                  style: const TextStyle(fontSize: 14)),
-            const SizedBox(height: 8),
-            Wrap(
-              children: species.habitats
-                  .map((habitat) => Chip(label: Text(habitat.name)))
-                  .toList(),
+            // Phần nội dung bên trái
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    species.commonName,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    species.scientificName,
+                    style: const TextStyle(
+                        fontSize: 16, fontStyle: FontStyle.italic),
+                  ),
+                  if (species.conservationStatus != null)
+                    Text(
+                      'Status: ${species.conservationStatus!.severity}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 6.0,
+                    children: species.habitats
+                        .map((habitat) => Chip(label: Text(habitat.name)))
+                        .toList(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12), // Khoảng cách giữa nội dung và hình ảnh
+            // Hình ảnh nằm bên phải
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                species.imageUrl?.isNotEmpty == true
+                    ? species.imageUrl!
+                    : 'https://via.placeholder.com/100', // URL hình ảnh mặc định
+                height: 80, // Chiều cao hình ảnh
+                width: 80, // Chiều rộng hình ảnh
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.broken_image,
+                  color: Colors.grey,
+                  size: 80,
+                ),
+              ),
             ),
           ],
         ),
@@ -207,7 +243,7 @@ class _SearchState extends State<Search> {
                       _selectedConservationStatus = newValue;
                     });
                   },
-                  items: ['Vulnerable', 'Endangered', 'Least Concern']
+                  items: ['Dễ tổn thương', 'Bị đe dọa', 'Ít quan tâm nhất']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -226,7 +262,7 @@ class _SearchState extends State<Search> {
                       _selectedHabitat = newValue;
                     });
                   },
-                  items: ['Savanna', 'Desert', 'Tropical Forest']
+                  items: ['Xavan', 'Sa mạc', 'Rừng Nhiệt Đới']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -245,7 +281,7 @@ class _SearchState extends State<Search> {
                       _selectedGenus = newValue;
                     });
                   },
-                  items: ['Rosa', 'Panthera', 'Homo']
+                  items: ['Chi Hoa Hồng', 'Chi Báo', 'Chi Sồi']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -264,7 +300,7 @@ class _SearchState extends State<Search> {
                       _selectedFamily = newValue;
                     });
                   },
-                  items: ['Rosaceae', 'Felidae', 'Hominidae']
+                  items: ['Họ Hoa Hồng', 'Họ Mèo']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -283,7 +319,7 @@ class _SearchState extends State<Search> {
                       _selectedOrder = newValue;
                     });
                   },
-                  items: ['Rosales', 'Carnivora', 'Primates']
+                  items: ['Bộ Hoa Hồng', 'Bộ Ăn Thịt']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -302,7 +338,7 @@ class _SearchState extends State<Search> {
                       _selectedClass = newValue;
                     });
                   },
-                  items: ['Magnoliopsida', 'Mammalia', 'Aves']
+                  items: ['Lớp Ngọc Lan', 'Lớp Thú', 'Lớp Chim']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -321,7 +357,7 @@ class _SearchState extends State<Search> {
                       _selectedPhylum = newValue;
                     });
                   },
-                  items: ['Magnoliophyta', 'Chordata']
+                  items: ['Ngành Ngọc Lan', 'Động vật có dây sống']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -340,7 +376,7 @@ class _SearchState extends State<Search> {
                       _selectedKingdom = newValue;
                     });
                   },
-                  items: ['Plantae', 'Animalia']
+                  items: ['Thực vật', 'Động vật']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
