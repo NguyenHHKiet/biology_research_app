@@ -53,8 +53,14 @@ const setupAssociations = models => {
   });
 
   // Species -> Characteristic (1-N)
-  Species.hasMany(Characteristic, { foreignKey: "species_id", as: "characteristics" });
-  Characteristic.belongsTo(Species, { foreignKey: "species_id", as: "species" });
+  Species.hasMany(Characteristic, {
+    foreignKey: "species_id",
+    as: "characteristics",
+  });
+  Characteristic.belongsTo(Species, {
+    foreignKey: "species_id",
+    as: "species",
+  });
 
   // Species <-> Habitat (N-N)
   Species.belongsToMany(Habitat, {
@@ -73,7 +79,10 @@ const setupAssociations = models => {
     foreignKey: "species_id",
     as: "geographicDistributions",
   });
-  GeographicDistribution.belongsTo(Species, { foreignKey: "species_id", as: "species" });
+  GeographicDistribution.belongsTo(Species, {
+    foreignKey: "species_id",
+    as: "species",
+  });
 
   // Author <-> Species (M-N) thông qua SpeciesAuthor
   Author.belongsToMany(Species, {
@@ -100,12 +109,25 @@ const setupAssociations = models => {
   });
 
   // ** Thiết lập quan hệ ConservationStatus và Species **
-  ConservationStatus.belongsTo(Species, { foreignKey: "species_id", as: "species", onDelete: "CASCADE" });
-  Species.hasOne(ConservationStatus, { foreignKey: "species_id", as: "conservationStatus" });
+  ConservationStatus.belongsTo(Species, {
+    foreignKey: "species_id",
+    as: "species",
+    onDelete: "CASCADE",
+  });
+  Species.hasOne(ConservationStatus, {
+    foreignKey: "species_id",
+    as: "conservationStatus",
+  });
 
   // ** Thiết lập quan hệ ResearchSubject và ResearchRecord **
-  ResearchSubject.hasMany(ResearchRecord, { foreignKey: "research_subject_id", as: "researchRecords" });
-  ResearchRecord.belongsTo(ResearchSubject, { foreignKey: "research_subject_id", as: "researchSubject" });
+  ResearchSubject.hasMany(ResearchRecord, {
+    foreignKey: "research_subject_id",
+    as: "researchRecords",
+  });
+  ResearchRecord.belongsTo(ResearchSubject, {
+    foreignKey: "research_subject_id",
+    as: "researchSubject",
+  });
 
   // Các quan hệ khác tùy thuộc vào yêu cầu của hệ thống
 };

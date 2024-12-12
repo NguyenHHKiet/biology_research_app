@@ -1,11 +1,5 @@
 const express = require("express");
-const {
-  getAllSpecies,
-  getSingleSpecies,
-  createSpecies,
-  updateSpecies,
-  deleteSpecies,
-} = require("../controllers/species");
+const { getAllSpecies, getSingleSpecies, createSpecies, updateSpecies, deleteSpecies } = require("../controllers/species");
 
 const { models } = require("../models");
 const advancedResults = require("../middleware/advancedResults");
@@ -42,7 +36,13 @@ router
                           model: models.Phylum,
                           as: "phylum",
                           attributes: ["name"],
-                          include: [{ model: models.Kingdom, as: "kingdom", attributes: ["name"] }],
+                          include: [
+                            {
+                              model: models.Kingdom,
+                              as: "kingdom",
+                              attributes: ["name"],
+                            },
+                          ],
                         },
                       ],
                     },

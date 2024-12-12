@@ -31,9 +31,7 @@ const advancedResults =
       // Sorting
       let order = [];
       if (req.query.sort) {
-        order = req.query.sort
-          .split(",")
-          .map(field => (field.startsWith("-") ? [field.slice(1), "DESC"] : [field, "ASC"]));
+        order = req.query.sort.split(",").map(field => (field.startsWith("-") ? [field.slice(1), "DESC"] : [field, "ASC"]));
       } else {
         order.push(["createdAt", "DESC"]); // Default sort by createdAt
       }
