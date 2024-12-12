@@ -38,15 +38,14 @@ app.get("/", (req, res) => {
 const apiRoutes = require("./routes");
 app.use("/api/v1", apiRoutes);
 
-// Next handler error if something goes wrong
+// Middleware xử lý lỗi và sử dụng errorHandler
 app.use((req, res, next) => {
-  // Error goes via `next()` method now
+  // * Giữ lại để đảm bảo lỗi được truyền đi một cách bất đồng bộ
   setImmediate(() => {
-    next(new ErrorResponse("Something went wrong!!!", 500));
+    const error = new ErrorResponse("Something went wrong!!!", 500);
+    next(error); // Chuyển tiếp lỗi đến errorHandler
   });
-});
-
-app.use(errorHandler);
+}, errorHandler);
 
 // Hàm khởi động server và thiết lập database
 const startServer = async () => {
