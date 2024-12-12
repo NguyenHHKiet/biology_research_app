@@ -3,6 +3,7 @@ import 'package:app/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,6 +15,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   Future<String?>? _nameFuture;
+
+  final Uri _url = Uri.parse('https://uminhthuong.girs.vn/');
 
   @override
   void initState() {
@@ -52,6 +55,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         fontWeight: FontWeight.bold,
       ),
     );
+  }
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Không thể mở URL: $_url');
+    }
   }
 
   Widget _buildGreetingRow(String name) {
@@ -151,9 +160,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   opacity: 1.0,
                   duration: const Duration(seconds: 2),
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Thêm hành động khi nhấn nút
-                    },
+                    onPressed: _launchUrl,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       padding: const EdgeInsets.symmetric(
