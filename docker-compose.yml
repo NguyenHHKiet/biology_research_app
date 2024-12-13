@@ -23,27 +23,27 @@ services:
       - DB_DIALECT=${DB_DIALECT}
       - DB_PORT=${DB_PORT}
 
-  # app:
-  #   build:
-  #     context: ./app
-  #     dockerfile: Dockerfile
-  #   container_name: app_service
-  #   ports:
-  #     - "${FLUTTER_PORT}:${FLUTTER_PORT}"
-  #   links:
-  #     - api
-  #   volumes:
-  #     - ./app:/usr/src/app
-  #   networks:
-  #     - app_network
-  #   environment:
-  #     - API_URL=${API_URL}
-  #     - FLUTTER_PORT=${FLUTTER_PORT}
-  #     - API_KEY=${API_KEY}
-  #     - APP_ID=${APP_ID}
-  #     - MESSAGING_SENDER_ID=${MESSAGING_SENDER_ID}
-  #     - STORAGE_BUCKET=${STORAGE_BUCKET}
-  #     - PROJECT_ID=${PROJECT_ID}
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: app_service
+    ports:
+      - "${FLUTTER_PORT}:${FLUTTER_PORT}"
+    links:
+      - api
+    volumes:
+      - ./app:/usr/src/app
+    networks:
+      - app_network
+    environment:
+      - API_URL=${API_URL}
+      - FLUTTER_PORT=${FLUTTER_PORT}
+      - API_KEY=${API_KEY}
+      - APP_ID=${APP_ID}
+      - MESSAGING_SENDER_ID=${MESSAGING_SENDER_ID}
+      - STORAGE_BUCKET=${STORAGE_BUCKET}
+      - PROJECT_ID=${PROJECT_ID}
 
   db:
     image: postgres:15
