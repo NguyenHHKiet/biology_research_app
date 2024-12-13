@@ -1,5 +1,5 @@
 # Sử dụng hình ảnh nền Ubuntu với Flutter đã cài đặt sẵn
-FROM biology_research_app-app:latest
+FROM biology_research_app-web:latest
 
 # Copy code ứng dụng vào container
 WORKDIR /app
