@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# Define the port
+# Định nghĩa port
 PORT=9000
 
-# Check if the port is in use and release it if necessary.
-echo "Checking if port $PORT is in use..."
+# Kiểm tra xem port có đang được sử dụng không và giải phóng nếu cần
+echo "Đang kiểm tra xem cổng $PORT có đang được sử dụng không..."
 if [ "$(lsof -t -i :$PORT)" ]; then
-  echo "Port $PORT is in use. Stopping the process on that port..."
+  echo "Cổng $PORT đang được sử dụng. Dừng tiến trình đang chạy trên cổng này..."
   fuser -k -n tcp $PORT
 fi
 
-# Switch to the web construction directory
+# Chuyển đến thư mục build web của ứng dụng
 cd /app/build/web/
 
-# Start the web server on the specified port
-echo "Starting the server on port $PORT..."
+# Khởi động server trên cổng được chỉ định
+echo "Khởi động server trên cổng $PORT..."
 python3 -m http.server $PORT

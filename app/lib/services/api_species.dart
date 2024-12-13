@@ -5,8 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ApiSpecies {
-  static String apiUrl =
-      'http://localhost:${dotenv.env['API_PORT']}/api/v1/species';
+  static String apiUrl = '${dotenv.env['API_URL']}/api/v1/species';
 
   Future<List<Species>> fetchSpecies() async {
     final response = await http.get(Uri.parse(apiUrl));

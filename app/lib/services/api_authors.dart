@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ApiAuthors {
   Future<void> createAuthor(String name, String affiliation) async {
-    final url = Uri.parse('http://localhost:3000/api/v1/authors');
+    final url = Uri.parse('${dotenv.env['API_URL']}/api/v1/authors');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
