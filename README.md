@@ -40,3 +40,9 @@ docker-compose up --build
 ```
 
 Docker Compose sẽ tự động tải các biến môi trường từ file `.env` vào các container và bắt đầu các dịch vụ của bạn (API, Flutter app và PostgreSQL).
+
+## Entity Relationship (ER) Diagram
+
+Biểu đồ quan hệ thực thể (ER) là một loại sơ đồ luồng minh họa cách các “thực thể” như con người, đối tượng hoặc khái niệm liên quan đến nhau trong một hệ thống.
+
+![image](./assets/images/Tổng%20Hợp%20Kiến%20Thức%20Sinh%20Vật%20Học.drawio.png)
