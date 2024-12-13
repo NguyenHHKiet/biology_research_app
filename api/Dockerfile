@@ -1,49 +1,49 @@
-# Stage 1: Build dependencies
+# Giai đoạn 1: Xây dựng các phụ thuộc
 FROM node:18-alpine AS build
 
-# Set working directory
+# Thiết lập thư mục làm việc
 WORKDIR /usr/src/app
 
-# Copy package files first to leverage docker caching
+# Sao chép các tệp package đầu tiên để tận dụng bộ nhớ đệm Docker
 COPY package*.json ./
 
-# Install dependencies
-# Use npm ci for more reliable dependency installation in production
+# Cài đặt các phụ thuộc
+# Sử dụng npm ci để cài đặt phụ thuộc đáng tin cậy hơn trong môi trường sản xuất
 RUN npm ci --only=production
 
-# Stage 2: Production environment
+# Giai đoạn 2: Môi trường sản xuất
 FROM node:18-alpine
 
-# Set working directory
+# Thiết lập thư mục làm việc
 WORKDIR /usr/src/app
 
-# Install only production dependencies
+# Cài đặt chỉ các phụ thuộc sản xuất
 COPY --from=build /usr/src/app/node_modules ./node_modules
 
-# Copy application files
+# Sao chép các tệp ứng dụng
 COPY . .
 
-# Remove any development or unnecessary files
+# Xóa các tệp phát triển hoặc không cần thiết
 RUN rm -rf test .git .gitignore
 
-# Create a non-root user for security
+# Tạo một người dùng không phải root để tăng cường bảo mật
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Change ownership of the application directory
+# Thay đổi quyền sở hữu của thư mục ứng dụng
 RUN chown -R appuser:appgroup /usr/src/app
 
-# Switch to non-root user
+# Chuyển đổi sang người dùng không phải root
 USER appuser
 
-# Expose the port the app runs on
+# Tiếp xúc cổng mà ứng dụng chạy trên đó
 EXPOSE ${API_PORT}
 
-# Set environment to production
+# Thiết lập môi trường thành sản xuất
 ENV NODE_ENV=production
 
-# Health check (optional)
+# Kiểm tra sức khỏe (tùy chọn)
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
   CMD wget -qO- http://localhost:${API_PORT}/health || exit 1
 
-# Command to run the application
+# Lệnh để chạy ứng dụng
 CMD ["npm", "start"]

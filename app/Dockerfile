@@ -1,4 +1,4 @@
-# Install Operating system and dependencies
+# Cài đặt Hệ điều hành và các phụ thuộc
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -11,30 +11,30 @@ ENV DEBIAN_FRONTEND=dialog
 ENV PUB_HOSTED_URL=https://pub.flutter-io.cn
 ENV FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 
-# download Flutter SDK from Flutter Github repo
+# Tải xuống Flutter SDK từ kho lưu trữ Github của Flutter
 RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
 
-# Set flutter environment path
+# Thiết lập đường dẫn môi trường Flutter
 ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
 
-# Run flutter doctor
+# Chạy flutter doctor
 RUN flutter doctor
 
-# Enable flutter web
+# Bật tính năng Flutter web
 RUN flutter channel master
 RUN flutter upgrade
 RUN flutter config --enable-web
 
-# Copy files to container and build
+# Sao chép các tệp vào container và xây dựng
 RUN mkdir /app/
 COPY . /app/
 WORKDIR /app/
 RUN flutter build web
 
-# Record the exposed port
+# Ghi lại cổng được mở
 EXPOSE 9000
 
-# make server startup script executable and start the web server
+# Thiết lập tập lệnh khởi động server thành có thể thực thi và khởi động máy chủ web
 RUN ["chmod", "+x", "/app/server/server.sh"]
 
 ENTRYPOINT [ "/app/server/server.sh"]
