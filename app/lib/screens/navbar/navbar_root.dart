@@ -1,6 +1,6 @@
 import 'package:app/models/Colors.dart';
 import 'package:app/screens/home/home.dart';
-import 'package:app/screens/profile/Profile.dart';
+import 'package:app/screens/profile/profile.dart';
 import 'package:app/screens/search/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

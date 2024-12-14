@@ -1,19 +1,46 @@
-# Sử dụng hình ảnh nền Ubuntu với Flutter đã cài đặt sẵn
-FROM biology_research_app-web:latest
+# Sử dụng image gốc có sẵn các dependencies cho Flutter và Android
+FROM cirrusci/flutter:3.19.6
 
-# Copy code ứng dụng vào container
+# Thiết lập môi trường không tương tác
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Cài đặt các dependencies bổ sung (nếu cần)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    git \
+    wget \
+    unzip \
+    openjdk-17-jdk-headless \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Thiết lập biến môi trường Android
+ENV ANDROID_HOME=/opt/android-sdk-linux
+ENV ANDROID_SDK_ROOT=/opt/android-sdk-linux
+ENV PATH="${PATH}:${ANDROID_HOME}/cmdline-tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools/bin"
+
+# Tạo thư mục làm việc
 WORKDIR /app
+
+# Sao chép mã nguồn ứng dụng
 COPY . .
 
-# Cài đặt các phụ thuộc của ứng dụng
-RUN flutter pub get
+# Cấp quyền thực thi cho Gradle wrapper
+RUN chmod +x ./android/gradlew
 
-# Xây dựng ứng dụng cho Android và iOS
-RUN flutter build apk
-RUN flutter build ios
+# Chấp nhận các licenses Android SDK
+RUN yes | flutter doctor --android-licenses
 
-# (Tùy chọn) Nếu bạn muốn chạy các test
-# RUN flutter test
+# Kiểm tra môi trường Flutter
+RUN flutter doctor -v
 
-# Tạo một điểm vào để chạy ứng dụng (ví dụ: chạy ứng dụng Android)
-CMD ["flutter", "run", "-d", " emulator"]
+# Build APK 
+# Có thể thay đổi giữa --debug, --release, hoặc --profile
+RUN flutter build apk --release
+
+# Tùy chọn: Xuất APK như một artifact
+# Lưu ý: Bạn có thể điều chỉnh đường dẫn tùy theo cấu trúc dự án của bạn
+VOLUME ["/app/build/app/outputs/flutter-apk"]
+
+# Lệnh mặc định (tùy chọn)
+CMD ["flutter", "--version"]

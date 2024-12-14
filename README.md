@@ -25,7 +25,15 @@ Cần một số lưu ý khi bạn build trong môi trường docker, bạn ph�
    docker-compose up --build
    ```
 
-   Docker Compose sẽ tự động tải các biến môi trường từ file `.env` vào các container và bắt đầu các dịch vụ của bạn (API, Flutter app và PostgreSQL).
+   **Dùng BuildKit cho hiệu năng tốt hơn**
+
+   BuildKit là engine mới của Docker giúp cải thiện hiệu năng build và caching:
+
+   ```bash
+   DOCKER_BUILDKIT=1 docker-compose build --progress=plain
+   ```
+
+   Docker Compose sẽ tự động tải các biến môi trường từ file `.env` vào các container và bắt đầu các dịch vụ của bạn (API, Flutter app và PostgreSQL). Nếu bạn thực hiện các bước trên, lần build tiếp theo sẽ nhanh hơn rất nhiều do Docker tận dụng cache hiệu quả! Thêm flag `--progress=plain` để kiểm tra liệu cache có được sử dụng đúng cách hay không:
 
 2. **Kiểm tra kết nối tới PostgresSQL:** Mở một shell trong container `api` và xác minh kết nối bằng lệnh Sequelize:
 

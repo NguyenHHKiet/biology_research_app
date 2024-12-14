@@ -1,4 +1,20 @@
-# **Chạy ứng dụng Flutter**
+# Các bước tạo Docker Image và Container
+
+Dưới đây là một Dockerfile để build ứng dụng Flutter mobile (Android):
+
+```bash
+# Build Docker image
+docker build -t myapp-mobile -f Dockerfile.mobile .
+
+# Chạy container và copy APK ra ngoài
+docker run --name myapp-mobile-build myapp-mobile
+docker cp myapp-mobile-build:/app/build/app/outputs/flutter-apk/app-release.apk ./
+
+# Hoặc mount volume để xuất APK
+docker run -v ./apk-output:/app/build/app/outputs/flutter-apk myapp-mobile
+```
+
+## **Chạy ứng dụng Flutter**
 
 1. **Mở project Flutter:**
 
