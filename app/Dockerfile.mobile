@@ -43,4 +43,4 @@ RUN flutter build apk --release
 VOLUME ["/app/build/app/outputs/flutter-apk"]
 
 # Lệnh mặc định (tùy chọn)
-CMD ["flutter", "--version"]
+CMD ["flutter", "run", "-d", "chrome"]

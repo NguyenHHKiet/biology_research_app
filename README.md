@@ -16,6 +16,8 @@ Cần một số lưu ý khi bạn build trong môi trường docker, bạn ph�
 - **Môi trường development:** bạn sẽ tạo riêng `.env` cho từng project.
 - **Lưu ý:** bạn sử dụng pgAdmin trên máy tính thì DB_HOST là `localhost`, hoặc `db` khi sử dụng postgres docker.
 
+Đảm bảo các biến môi trường (`API_PORT`, `FLUTTER_PORT`, `DB_USER`, `DB_PASSWORD`, v.v.) được định nghĩa đầy đủ và đúng giá trị trong file `.env`.
+
 ## 3. Build và chạy container
 
 1. **Build Docker Compose:**

@@ -45,8 +45,11 @@ COPY --from=builder /lib /lib
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     libstdc++6 \
+    lsof \
     libglu1-mesa \
-    ca-certificates && \
+    ca-certificates \
+    python3 \
+    python3-pip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -55,6 +58,9 @@ ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PAT
     PUB_HOSTED_URL=https://pub.flutter-io.cn \
     FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 
+# Nếu bạn muốn đảm bảo thư mục /app/build/web tồn tại, bạn có thể tạo nó trong Docker trước khi copy
+RUN mkdir -p /app/build/web
+
 # Tạo thư mục ứng dụng
 WORKDIR /app
 
@@ -62,7 +68,7 @@ WORKDIR /app
 COPY . .
 
 # Build ứng dụng web
-RUN /bin/sh -c /bin/sh -c flutter build web
+RUN /bin/sh -c /bin/sh -c flutter build web --release
 
 # Thiết lập quyền thực thi cho script server
 RUN chmod +x /app/server/server.sh
