@@ -1,46 +1,34 @@
-# Sử dụng image gốc có sẵn các dependencies cho Flutter và Android
-FROM cirrusci/flutter:3.19.6
+FROM ubuntu:24.04
 
-# Thiết lập môi trường không tương tác
-ENV DEBIAN_FRONTEND=noninteractive
+# Cập nhật và cài đặt các công cụ cần thiết
+RUN apt-get update && apt-get install -y \
+    curl git unzip xz-utils zip libglu1-mesa openjdk-11-jdk wget \
+    && apt-get clean
 
-# Cài đặt các dependencies bổ sung (nếu cần)
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    git \
-    wget \
-    unzip \
-    openjdk-17-jdk-headless \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Thêm user developer và thiết lập workspace
+RUN useradd -ms /bin/bash developer
+USER developer
+WORKDIR /home/developer
 
-# Thiết lập biến môi trường Android
-ENV ANDROID_HOME=/opt/android-sdk-linux
-ENV ANDROID_SDK_ROOT=/opt/android-sdk-linux
-ENV PATH="${PATH}:${ANDROID_HOME}/cmdline-tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools/bin"
+# Tải Flutter SDK
+RUN git clone https://github.com/flutter/flutter.git /home/developer/flutter
+ENV PATH="/home/developer/flutter/bin:/home/developer/flutter/bin/cache/dart-sdk/bin:$PATH"
 
-# Tạo thư mục làm việc
-WORKDIR /app
+# Tải Android SDK
+RUN mkdir -p /home/developer/Android/sdk \
+    && wget -O sdk-tools.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip \
+    && unzip sdk-tools.zip -d /home/developer/Android/sdk \
+    && rm sdk-tools.zip
+ENV ANDROID_SDK_ROOT="/home/developer/Android/sdk"
+ENV PATH="$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
 
-# Sao chép mã nguồn ứng dụng
-COPY . .
+# Cài đặt các công cụ build của Android
+RUN yes | sdkmanager --licenses \
+    && sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
 
-# Cấp quyền thực thi cho Gradle wrapper
-RUN chmod +x ./android/gradlew
-
-# Chấp nhận các licenses Android SDK
-RUN yes | flutter doctor --android-licenses
-
-# Kiểm tra môi trường Flutter
+# Kiểm tra cài đặt Flutter
 RUN flutter doctor -v
 
-# Build APK 
-# Có thể thay đổi giữa --debug, --release, hoặc --profile
-RUN flutter build apk --release
-
-# Tùy chọn: Xuất APK như một artifact
-# Lưu ý: Bạn có thể điều chỉnh đường dẫn tùy theo cấu trúc dự án của bạn
-VOLUME ["/app/build/app/outputs/flutter-apk"]
-
-# Lệnh mặc định (tùy chọn)
-CMD ["flutter", "run", "-d", "chrome"]
+# Tạo thư mục workspace để chứa mã nguồn
+RUN mkdir -p /home/developer/workspace
+WORKDIR /home/developer/workspace

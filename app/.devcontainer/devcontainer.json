@@ -1,0 +1,13 @@
+{
+  "name": "mobile_service",
+  "build": {
+    "dockerfile": "../Dockerfile.mobile",
+    "context": ".."
+  },
+  "remoteUser": "developer",
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "extensions": ["dart-code.flutter"],
+  "workspaceFolder": "/home/developer/workspace"
+}
