@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: api_service
     ports:
-      - "${API_PORT}:3000" # Sử dụng cổng nội bộ cố định nếu ứng dụng lắng nghe trên 3000
+      - "${API_PORT}:3000"
     depends_on:
       - db
     volumes:
@@ -30,11 +30,12 @@ services:
       dockerfile: Dockerfile.web
     container_name: web_service
     ports:
-      - "${FLUTTER_PORT}:9000" # Flutter server lắng nghe trên cổng 9000
+      - "${FLUTTER_PORT}:9000"
     depends_on:
       - api
     volumes:
       - ./app:/usr/src/app
+      - flutter-cache:/usr/local/flutter/bin/cache
     networks:
       - frontend_network
     environment:
@@ -45,6 +46,11 @@ services:
       MESSAGING_SENDER_ID: ${MESSAGING_SENDER_ID}
       STORAGE_BUCKET: ${STORAGE_BUCKET}
       PROJECT_ID: ${PROJECT_ID}
+      # Biến môi trường cần thiết
+      PUB_HOSTED_URL: https://pub.flutter-io.cn
+      FLUTTER_STORAGE_BASE_URL: https://storage.flutter-io.cn
+    stdin_open: true
+    tty: true
 
   db:
     image: postgres:15
@@ -66,6 +72,7 @@ services:
 volumes:
   postgres_data:
   node_modules:
+  flutter-cache:
 
 networks:
   backend_network:

@@ -1,80 +1,37 @@
-# Sử dụng multi-stage build để giảm kích thước image
+# Stage 1 - Install dependencies and build the app
 FROM ubuntu:24.04 AS builder
 
-# Giảm số lượng layer và kết hợp các lệnh RUN
-ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y bash curl file git unzip xz-utils zip libglu1-mesa
+RUN apt-get clean
 
-# Cài đặt các dependencies và làm sạch trong một lệnh RUN
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    curl \
-    git \
-    wget \
-    unzip \
-    gdb \
-    libstdc++6 \
-    libglu1-mesa \
-    fonts-droid-fallback \
-    python3 \
-    ca-certificates && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Clone the flutter repo
+RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
 
-# Thiết lập các biến môi trường 
-ENV DEBIAN_FRONTEND=dialog \
-    PUB_HOSTED_URL=https://pub.flutter-io.cn \
-    FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn \
-    PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
+# Set flutter path
+# RUN /usr/local/flutter/bin/flutter doctor -v
+ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
 
-# Tải và cài đặt Flutter SDK
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter && \
-    flutter channel master && \
-    flutter upgrade && \
-    flutter config --enable-web && \
-    flutter doctor
+# Change stable channel
+RUN flutter channel stable
 
-# Giai đoạn cuối để tạo image nhỏ gọn
-FROM ubuntu:24.04
+# Enable web capabilities
+RUN flutter config --enable-web
+RUN flutter upgrade
+RUN flutter pub global activate webdev
 
-# Sao chép các dependencies cần thiết từ giai đoạn builder
-COPY --from=builder /usr/local/flutter /usr/local/flutter
-COPY --from=builder /usr/lib /usr/lib
-COPY --from=builder /lib /lib
+# RUN flutter doctor -v
 
-# Sao chép các dependencies hệ thống cần thiết
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    libstdc++6 \
-    lsof \
-    libglu1-mesa \
-    ca-certificates \
-    python3 \
-    python3-pip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Thiết lập các biến môi trường
-ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}" \
-    PUB_HOSTED_URL=https://pub.flutter-io.cn \
-    FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
-
-# Nếu bạn muốn đảm bảo thư mục /app/build/web tồn tại, bạn có thể tạo nó trong Docker trước khi copy
-RUN mkdir -p /app/build/web
-
-# Tạo thư mục ứng dụng
+# Copy files to container and build
+RUN mkdir /app
+COPY . /app
 WORKDIR /app
+RUN flutter pub get
+RUN flutter build web
 
-# Sao chép mã nguồn ứng dụng
-COPY . .
+# Stage 2 - Create the run-time image
+FROM nginx:stable-alpine AS runner
 
-# Build ứng dụng web
-RUN /bin/sh -c /bin/sh -c flutter build web --release
-
-# Thiết lập quyền thực thi cho script server
-RUN chmod +x /app/server/server.sh
-
-# Mở cổng
-EXPOSE 9000
-
-# Điểm entry point
-ENTRYPOINT ["/app/server/server.sh"]
+COPY default.conf /etc/nginx/conf.d
+# COPY package.json /usr/share/nginx/html
+COPY --from=builder /app/build/web /usr/share/nginx/html
