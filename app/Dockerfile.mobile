@@ -23,7 +23,7 @@ ENV ANDROID_SDK_ROOT="/home/developer/Android/sdk"
 ENV PATH="$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
 
 # Cài đặt các công cụ build của Android
-RUN yes | sdkmanager --licenses \
+RUN /bin/sh -c yes | sdkmanager --licenses \
     && sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
 
 # Kiểm tra cài đặt Flutter
