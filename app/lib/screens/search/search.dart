@@ -392,6 +392,17 @@ class _SearchState extends State<Search> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
+                  // Đặt lại tất cả các bộ lọc về null
+                  _selectedConservationStatus = null;
+                  _selectedHabitat = null;
+                  _selectedGenus = null;
+                  _selectedFamily = null;
+                  _selectedOrder = null;
+                  _selectedClass = null;
+                  _selectedPhylum = null;
+                  _selectedKingdom = null;
+
+                  // Đặt lại danh sách đã lọc bằng danh sách đầy đủ
                   _filteredSpecies = _species;
                 });
                 Navigator.pop(context);

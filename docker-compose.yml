@@ -52,33 +52,33 @@ services:
     stdin_open: true
     tty: true
 
-  mobile:
-    build:
-      context: ./app
-      dockerfile: Dockerfile.mobile
-    container_name: mobile_service
-    ports:
-      - "${FLUTTER_PORT_MOBILE}:5555"
-    depends_on:
-      - api
-    volumes:
-      - ./app/workspace:/home/developer/workspace
-    networks:
-      - frontend_network
-    environment:
-      API_URL: ${API_URL}
-      FLUTTER_PORT: ${FLUTTER_PORT}
-      API_KEY: ${API_KEY}
-      APP_ID: ${APP_ID}
-      MESSAGING_SENDER_ID: ${MESSAGING_SENDER_ID}
-      STORAGE_BUCKET: ${STORAGE_BUCKET}
-      PROJECT_ID: ${PROJECT_ID}
-      # Biến môi trường cần thiết
-      PUB_HOSTED_URL: https://pub.flutter-io.cn
-      FLUTTER_STORAGE_BASE_URL: https://storage.flutter-io.cn
-      ANDROID_SDK_ROOT: /home/developer/Android/sdk
-      PATH: /home/developer/flutter/bin:/home/developer/flutter/bin/cache/dart-sdk/bin:$PATH
-    tty: true
+  # mobile:
+  #   build:
+  #     context: ./app
+  #     dockerfile: Dockerfile.mobile
+  #   container_name: mobile_service
+  #   ports:
+  #     - "${FLUTTER_PORT_MOBILE}:5555"
+  #   depends_on:
+  #     - api
+  #   volumes:
+  #     - ./app/workspace:/home/developer/workspace
+  #   networks:
+  #     - frontend_network
+  #   environment:
+  #     API_URL: ${API_URL}
+  #     FLUTTER_PORT: ${FLUTTER_PORT}
+  #     API_KEY: ${API_KEY}
+  #     APP_ID: ${APP_ID}
+  #     MESSAGING_SENDER_ID: ${MESSAGING_SENDER_ID}
+  #     STORAGE_BUCKET: ${STORAGE_BUCKET}
+  #     PROJECT_ID: ${PROJECT_ID}
+  #     # Biến môi trường cần thiết
+  #     PUB_HOSTED_URL: https://pub.flutter-io.cn
+  #     FLUTTER_STORAGE_BASE_URL: https://storage.flutter-io.cn
+  #     ANDROID_SDK_ROOT: /home/developer/Android/sdk
+  #     PATH: /home/developer/flutter/bin:/home/developer/flutter/bin/cache/dart-sdk/bin:$PATH
+  #   tty: true
 
   db:
     image: postgres:15

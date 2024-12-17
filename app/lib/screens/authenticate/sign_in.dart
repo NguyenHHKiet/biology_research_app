@@ -259,6 +259,63 @@ class _SignInState extends State<SignIn> {
                           const SizedBox(
                             height: 10,
                           ),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              minimumSize: const Size(200, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            icon: Image.asset(
+                              'assets/google.png',
+                              height: 24,
+                            ),
+                            label: const Text(
+                              'Đăng nhập với Google',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            onPressed: () async {
+                              final user = await _auth.signInWithGoogle();
+                              if (user != null) {
+                                Fluttertoast.showToast(
+                                    msg: "Đăng nhập Google thành công",
+                                    backgroundColor: Colors.green);
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "Đăng nhập Google thất bại",
+                                    backgroundColor: Colors.red);
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              minimumSize: const Size(200, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            icon:
+                                const Icon(Icons.facebook, color: Colors.white),
+                            label: const Text(
+                              'Đăng nhập với Facebook',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () async {
+                              final user = await _auth.signInWithFacebook();
+                              if (user != null) {
+                                Fluttertoast.showToast(
+                                    msg: "Đăng nhập Facebook thành công",
+                                    backgroundColor: Colors.green);
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "Đăng nhập Facebook thất bại",
+                                    backgroundColor: Colors.red);
+                              }
+                            },
+                          ),
                         ],
                       ),
                     )

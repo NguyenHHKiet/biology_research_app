@@ -4,7 +4,9 @@ import 'package:app/screens/authenticate/sign_in.dart';
 import 'package:app/screens/navbar/navbar_root.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -147,6 +149,46 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       _showSnackBar(
           context: context, message: e.message ?? "Đổi email thất bại");
+    }
+  }
+
+  // Đăng nhập bằng Google
+  Future<User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      if (googleAuth == null) return null;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await _auth.signInWithCredential(credential);
+      return userCredential.user;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  // Đăng nhập bằng Facebook
+  Future<User?> signInWithFacebook() async {
+    try {
+      final LoginResult result = await FacebookAuth.instance.login();
+      if (result.status == LoginStatus.success) {
+        final OAuthCredential facebookAuthCredential =
+            FacebookAuthProvider.credential(result.accessToken!.tokenString);
+        final userCredential =
+            await _auth.signInWithCredential(facebookAuthCredential);
+        return userCredential.user;
+      }
+      return null;
+    } catch (e) {
+      print(e.toString());
+      return null;
     }
   }
 }
