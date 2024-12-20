@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.app"
+    namespace = "app.edu.biology_research_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.app" // Update to your app's unique Application ID
+        applicationId = "app.edu.biology_research_app" // Update to your app's unique Application ID
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
