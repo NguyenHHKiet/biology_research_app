@@ -18,6 +18,35 @@ Cần một số lưu ý khi bạn build trong môi trường docker, bạn ph�
 
 Đảm bảo các biến môi trường (`API_PORT`, `FLUTTER_PORT`, `DB_USER`, `DB_PASSWORD`, v.v.) được định nghĩa đầy đủ và đúng giá trị trong file `.env`.
 
+```bash
+# API Configuration
+API_PORT= # Cổng mà API sẽ chạy (mặc định là `3000`).
+API_URL= # URL gốc của API (mặc định là `http://localhost:3000`).
+
+# Database Configuration
+DB_NAME= # Tên cơ sở dữ liệu
+DB_USER= # Tên người dùng để kết nối đến cơ sở dữ liệu.
+DB_PASSWORD= # Mật khẩu của người dùng cơ sở dữ liệu.
+DB_HOST= # Host của cơ sở dữ liệu (nếu sử dụng Docker, giá trị là `db`, ngược lại là `localhost`).
+DB_PORT= # Cổng để kết nối cơ sở dữ liệu (mặc định là `5432`).
+DB_DIALECT= # Loại cơ sở dữ liệu (mặc định là `postgres`).
+
+# Environment
+NODE_ENV= # Môi trường chạy của Node.js (`development`, `staging`, `production`).
+
+# Flutter Configuration
+FLUTTER_PORT= # Cổng chạy ứng dụng Flutter (mặc định là `9000`).
+FLUTTER_PORT_MOBILE= # Cổng dành cho thiết bị di động (mặc định là `5555`).
+API_KEY= # Khóa API dùng cho Firebase.
+APP_ID= # ID ứng dụng Firebase.
+MESSAGING_SENDER_ID= # ID người gửi Firebase Cloud Messaging.
+STORAGE_BUCKET= # URL bucket của Firebase Storage.
+PROJECT_ID= # ID dự án Firebase.
+
+# Other Configurations
+SEED_DB= # Cờ cho biết có cần khởi tạo dữ liệu mẫu trong cơ sở dữ liệu hay không (`true` hoặc `false`).
+```
+
 ## 3. Build và chạy container
 
 1. **Build Docker Compose:**
