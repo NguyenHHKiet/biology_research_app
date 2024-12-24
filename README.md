@@ -1,4 +1,4 @@
-# Xây Dựng Ứng Dụng Nghiêm Cứu Biology Research App
+# Xây Dựng Ứng Dụng Tra Cứu Biology Research App
 
 Dưới đây là tệp `docker-compose.yml` để triển khai cả hai dự án `api` (Node.js backend) và `app` (Flutter frontend mobile). Tệp này giúp bạn đồng bộ hóa việc xây dựng, chạy container, và liên kết hai dịch vụ với nhau.
 
