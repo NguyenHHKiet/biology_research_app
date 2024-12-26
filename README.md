@@ -56,14 +56,6 @@ SEED_DB= # Cờ cho biết có cần khởi tạo dữ liệu mẫu trong cơ s�
    docker-compose up --build
    ```
 
-   **Dùng BuildKit cho hiệu năng tốt hơn**
-
-   BuildKit là engine mới của Docker giúp cải thiện hiệu năng build và caching:
-
-   ```bash
-   DOCKER_BUILDKIT=1 docker-compose build --progress=plain
-   ```
-
    Docker Compose sẽ tự động tải các biến môi trường từ file `.env` vào các container và bắt đầu các dịch vụ của bạn (API, Flutter app và PostgreSQL). Nếu bạn thực hiện các bước trên, lần build tiếp theo sẽ nhanh hơn rất nhiều do Docker tận dụng cache hiệu quả! Thêm flag `--progress=plain` để kiểm tra liệu cache có được sử dụng đúng cách hay không:
 
 2. **Kiểm tra kết nối tới PostgresSQL:** Mở một shell trong container `api` và xác minh kết nối bằng lệnh Sequelize:
@@ -97,26 +89,6 @@ SEED_DB= # Cờ cho biết có cần khởi tạo dữ liệu mẫu trong cơ s�
     # Chạy migration:
     npx sequelize-cli db:migrate
   ```
-
-## 5. Cải tiến đề xuất
-
-1. **Tích hợp CI/CD:**
-
-   - Sử dụng GitHub Actions hoặc GitLab CI/CD để tự động hóa quá trình build và deploy.
-   - Ví dụ: chạy lệnh `docker-compose up` khi đẩy code lên nhánh chính.
-
-2. **Thêm Reverse Proxy:**
-
-   - Sử dụng Nginx hoặc Traefik làm reverse proxy để quản lý routing giữa `api` và `app`.
-   - Ví dụ: cấu hình Nginx để chuyển tiếp các yêu cầu `/api` tới backend và phần còn lại tới frontend.
-
-3. **Logging và Monitoring:**
-
-   - Thêm dịch vụ như ELK stack (Elasticsearch, Logstash, Kibana) hoặc Prometheus & Grafana để theo dõi logs và hiệu suất hệ thống.
-
-4. **Caching:**
-
-   - Sử dụng Redis để caching dữ liệu nhằm cải thiện hiệu năng backend.
 
 5. **Dockerize môi trường phát triển:**
 
